@@ -45,8 +45,38 @@ def dapi_rpc(method, params = {}, id = 1):
     #print('{} response:\n{}\n\n'.format(method, json.dumps(parsed, indent=4, sort_keys=True)))
     return parsed['result']
 
+def dapi_rpc_2(method, ip = 'evonet.thephez.com', port = 3000, params = {}, id = 1):
+    payload = {
+        'jsonrpc': RPC_VERSION,
+        'params': params,
+        'method': method,
+        'id': id
+        }
 
-def main():
+    u = 'http://{}:{}'.format(ip, port)
+
+    headers = {'content-type': 'application/json'}
+
+    try:
+        response = requests.post(u, data=json.dumps(payload), headers=headers, timeout=1)
+        response.raise_for_status()
+
+        parsed = json.loads(response.text)
+        #print('{} response:\n{}\n\n'.format(method, json.dumps(parsed, indent=4, sort_keys=True)))
+        return parsed['result']
+
+    except Exception as ex:
+        #print('Exception for {} - {}'.format(ip, payload))
+        raise
+
+def check_masternode(ip):
+    try:
+        current_block_hash = dapi_rpc_2('getBestBlockHash', ip, 3000)
+        print('Success from {}:\t{}'.format(ip, current_block_hash))
+    except Exception as ex:
+        print('Failure from {}:\t** {} **'.format(ip, ex))
+
+def get_masternode_list():
     params = { 'height': 0 }
     genesis_block_hash = dapi_rpc('getBlockHash', params)
 
@@ -63,7 +93,10 @@ def main():
     }
     masternode_list_diff = dapi_rpc(method, params)
 
-    masternode_list = masternode_list_diff['mnList']
+    return masternode_list_diff['mnList']
+
+def main():
+    masternode_list = get_masternode_list()
 
     mnl = SimplifiedMNListEntry()
     print('Masternode list contain {} masternodes'.format(len(masternode_list)))
@@ -73,6 +106,9 @@ def main():
 
     random_mn = mnl.get_random_masternode()
     print('Random MN: {}'.format(random_mn))
+
+    for m in mnl.mn_entry:
+        check_masternode(m['service'].split(':')[0])
 
 if __name__ == "__main__":
     main()
