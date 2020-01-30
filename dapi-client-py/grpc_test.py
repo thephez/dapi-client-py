@@ -7,7 +7,7 @@ import platform_pb2
 import platform_pb2_grpc
 #import platform_resources
 
-import cbor
+import cbor2
 
 GRPC_REQUEST_TIMEOUT = 5
 
@@ -25,7 +25,8 @@ identity_request.id = identity_id
 
 identity_response = platform_pb2.GetIdentityResponse()
 identity = stub.getIdentity(identity_request, GRPC_REQUEST_TIMEOUT)
-print(identity.identity)
+#print(identity.identity)
+print('ID cbor: {}\n'.format(cbor2.loads(identity.identity)))
 
 #print(dir(identity_response))
 
@@ -35,8 +36,8 @@ contract_request = platform_pb2.GetDataContractRequest()
 contract_request.id = dpns_contract_id
 
 data_contract = stub.getDataContract(contract_request, GRPC_REQUEST_TIMEOUT)
-print(data_contract)
-
+#print(data_contract)
+print('Data Contract cbor: {}\n'.format(cbor2.loads(data_contract.data_contract)))
 
 # Get Document
 contract_id = dpns_contract_id
@@ -44,8 +45,10 @@ contract_id = dpns_contract_id
 document_request = platform_pb2.GetDocumentsRequest()
 document_request.data_contract_id = contract_id
 document_request.document_type =  'domain'
-#document_request.limit =  5
-#document_request.where = # Requires cbor
+document_request.limit =  5
+#document_request.where = # Requires cbor (found in dapi-client)
 
 docs = stub.getDocuments(document_request, GRPC_REQUEST_TIMEOUT)
-print(docs)
+#print(docs)
+for d in docs.documents:
+    print('Document cbor: {}\n'.format(cbor2.loads(d)))
