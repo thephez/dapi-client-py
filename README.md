@@ -15,3 +15,17 @@ From root of repository
 ```shell
 pip install -e
 ```
+
+
+
+```
+python3 -m venv ~/venv/dapiclient
+source ~/venv/dapiclient/bin/activate
+python setup.py install
+pip install requests
+
+python dapiclient/MNDiscovery/masternode_list_provider.py
+
+python dapiclient/test-mndiscovery.py
+
+```
