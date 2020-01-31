@@ -1,8 +1,5 @@
 import grpc
 
-#import route_guide_pb2
-#import route_guide_pb2_grpc
-#import route_guide_resources
 import rpc.grpc.platform_pb2 as platform_pb2
 import rpc.grpc.platform_pb2_grpc as platform_pb2_grpc
 #import platform_resources
