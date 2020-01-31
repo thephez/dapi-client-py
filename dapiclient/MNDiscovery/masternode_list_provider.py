@@ -2,6 +2,7 @@ import requests
 import json
 import random
 import datetime
+from dapiclient.rpc.jsonrpc.jsonrpc_client import JsonRpcClient
 
 RPC_VERSION = '2.0'
 url = 'http://evonet.thephez.com:3000/'
