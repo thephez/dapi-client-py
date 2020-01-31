@@ -1,16 +1,23 @@
+import requests
+import json
+
+RPC_VERSION = '2.0'
 
 class JsonRpcClient:
+
     def __init__(self):
         return
+        
 
-    def request(self, url, method, params = {}, options = {}):
+    def request(url, method, params = {}, options = {}):
+        print(url)
         destination = 'http://{}:{}'.format(url['host'], url['port'])
 
         payload = {
             'jsonrpc': RPC_VERSION,
             'method': method,
             'params': params,
-            'id': id
+            'id': 1
             }
 
         headers = {'content-type': 'application/json'}

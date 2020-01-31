@@ -1,11 +1,7 @@
-import requests
-import json
 import random
 import datetime
 from dapiclient.rpc.jsonrpc.jsonrpc_client import JsonRpcClient
 
-RPC_VERSION = '2.0'
-url = 'http://evonet.thephez.com:3000/'
 SEED_IP = 'evonet.thephez.com'
 SEED_PORT = 3000
 MN_LIST_UPDATE_INTERVAL = 60000 / 1000
@@ -57,15 +53,11 @@ class MasternodeListProvider:
         #ip_address = node.service.split(':')[0];
         ip_address = SEED_IP
 
-        params = { 'height': genesis_height }
-        genesis_block_hash = dapi_rpc('getBlockHash', ip_address, self.dapi_port, params)
+        genesis_block_hash = JsonRpcClient.request({
+            'host': ip_address,
+            'port': self.dapi_port
+        }, 'getBlockHash', { 'height': genesis_height })
         return genesis_block_hash
-
-        #return RPCClient.request({
-        #  host: ipAddress,
-        #  port: this.DAPIPort,
-        #}, 'getBlockHash', { height: genesisHeight });
-
 
 
     def update_mn_list(self):
@@ -84,7 +76,11 @@ class MasternodeListProvider:
         base_block_hash = self.base_block_hash;
         ip_address = SEED_IP #node.service.split(':')[0];
 
-        block_hash = dapi_rpc('getBestBlockHash')
+        block_hash = JsonRpcClient.request({
+            'host': ip_address,
+            'port': self.dapi_port
+        }, 'getBestBlockHash')
+        #block_hash = dapi_rpc('getBestBlockHash')
 
         #const blockHash = await RPCClient.request({
         #  host: ipAddress,
@@ -94,17 +90,15 @@ class MasternodeListProvider:
         #  throw new Error(`Failed to get best block hash for getSimplifiedMNListDiff from node ${ipAddress}`);
         #}
 
-        method = 'getMnListDiff'
         params = {
             'baseBlockHash': base_block_hash,
             'blockHash': block_hash
         }
-        diff = dapi_rpc(method, ip_address, SEED_PORT, params)
+        diff = JsonRpcClient.request({
+            'host': ip_address,
+            'port': self.dapi_port
+        }, 'getMnListDiff', params)
 
-        #const diff = await RPCClient.request({
-        #  host: ipAddress,
-        #  port: this.DAPIPort,
-        #}, 'getMnListDiff', { baseBlockHash, blockHash });
         #if (!diff) {
         #  throw new Error(`Failed to get mn diff from node ${ipAddress}`);
         #}
@@ -124,30 +118,6 @@ class MasternodeListProvider:
 
         return self.masternode_list
 
-
-def dapi_rpc(method, ip = 'evonet.thephez.com', port = 3000, params = {}, id = 1):
-    payload = {
-        'jsonrpc': RPC_VERSION,
-        'params': params,
-        'method': method,
-        'id': id
-        }
-
-    u = 'http://{}:{}'.format(ip, port)
-
-    headers = {'content-type': 'application/json'}
-
-    try:
-        response = requests.post(u, data=json.dumps(payload), headers=headers, timeout=1)
-        response.raise_for_status()
-
-        parsed = json.loads(response.text)
-        #print('{} response:\n{}\n\n'.format(method, json.dumps(parsed, indent=4, sort_keys=True)))
-        return parsed['result']
-
-    except Exception as ex:
-        #print('Exception for {} - {}'.format(ip, payload))
-        raise
 
 #def check_masternode(ip):
 #    try:
