@@ -21,5 +21,9 @@ class MasternodeDiscovery:
         return self.mnlist_provider.get_mn_list()
 
 
+    def check_mn_response(self, ip_address):
+        return self.mnlist_provider.check_mn_response(ip_address)
+
+
     def reset(self):
         self.mnlist_provider = MasternodeListProvider(self.seeds);

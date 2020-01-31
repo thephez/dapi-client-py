@@ -80,12 +80,7 @@ class MasternodeListProvider:
             'host': ip_address,
             'port': self.dapi_port
         }, 'getBestBlockHash')
-        #block_hash = dapi_rpc('getBestBlockHash')
 
-        #const blockHash = await RPCClient.request({
-        #  host: ipAddress,
-        #  port: this.DAPIPort,
-        #}, 'getBestBlockHash', {});
         #if (!blockHash) {
         #  throw new Error(`Failed to get best block hash for getSimplifiedMNListDiff from node ${ipAddress}`);
         #}
@@ -119,46 +114,26 @@ class MasternodeListProvider:
         return self.masternode_list
 
 
-#def check_masternode(ip):
-#    try:
-#        current_block_hash = dapi_rpc('getBestBlockHash', ip, 3000)
-#        print('Success from {}:\t{}'.format(ip, current_block_hash))
-#    except Exception as ex:
-#        print('Failure from {}:\t** {} **'.format(ip, ex))
-#
-# def get_masternode_list():
-#     params = { 'height': 0 }
-#     genesis_block_hash = dapi_rpc('getBlockHash', SEED_IP, SEED_PORT, params)
-#
-#     current_block_hash = dapi_rpc('getBestBlockHash')
-#
-#     method = 'getBlockHeaders'
-#     params = { 'offset': 1, 'limit': 1 }
-#     dapi_rpc(method, SEED_IP, SEED_PORT, params)
-#
-#     method = 'getMnListDiff'
-#     params = {
-#         'baseBlockHash': genesis_block_hash,
-#         'blockHash': current_block_hash
-#     }
-#     masternode_list_diff = dapi_rpc(method, SEED_IP, SEED_PORT, params)
-#
-#     return masternode_list_diff['mnList']
+    def check_mn_response(self, ip_address):
+        try:
+            block_hash = JsonRpcClient.request({
+                'host': ip_address,
+                'port': self.dapi_port
+            }, 'getBestBlockHash')
+            print('Success from {}:\t{}'.format(ip_address, block_hash))
+        except Exception as ex:
+            print('Failure from {}:\t** {} **'.format(ip_address, ex))
+
 
 def main():
-    #masternode_list = get_masternode_list()
+    mnlist_provider = MasternodeListProvider(None)
+    masternode_list = mnlist_provider.get_mn_list()
 
-    #mnl = SimplifiedMNListEntry(None)
-    #print('Masternode list contain {} masternodes'.format(len(masternode_list)))
+    print('Masternode list contain {} masternodes'.format(len(masternode_list)))
 
-    #for mn in masternode_list:
-    #    mnl.add_entry(mn)
-
-    #random_mn = mnl.get_random_masternode()
-    #print('Random MN: {}'.format(random_mn))
-
-    #for m in mnl.mn_entry:
-    #    check_masternode(m['service'].split(':')[0])
+    print('Checking JSON-RPC response from all masternodes')
+    for m in masternode_list:
+        mnlist_provider.check_mn_response(m['service'].split(':')[0])
     return
 
 if __name__ == "__main__":

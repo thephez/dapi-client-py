@@ -21,6 +21,9 @@ def main():
     time.sleep(1)
     mnd.get_mnlist()
 
+    print('Test - Try connecting to JSON-RPC on a MN')
+    mnd.check_mn_response(mnl[0]['service'].split(':')[0])
+
     print('Test - Refresh list after timeout')
     time.sleep(60)
     mnd.get_mnlist()

@@ -7,10 +7,10 @@ class JsonRpcClient:
 
     def __init__(self):
         return
-        
+
 
     def request(url, method, params = {}, options = {}):
-        print(url)
+        #print(url)
         destination = 'http://{}:{}'.format(url['host'], url['port'])
 
         payload = {
