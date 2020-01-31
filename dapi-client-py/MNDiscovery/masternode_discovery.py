@@ -1,7 +1,7 @@
 from .masternode_list_provider import MasternodeListProvider
 import random
 
-class MNDiscovery:
+class MasternodeDiscovery:
     def __init__(self, seeds = None, port = None):
         self.mnlist_provider = MasternodeListProvider(seeds, port)
         self.seeds = seeds

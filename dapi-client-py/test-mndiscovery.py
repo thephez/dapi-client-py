@@ -1,11 +1,12 @@
 import json
 import time
-from MNDiscovery.masternode_discovery import MNDiscovery
+from MNDiscovery.masternode_discovery import MasternodeDiscovery
 
 def main():
-    mnd = MNDiscovery()
+    mnd = MasternodeDiscovery()
     print('Test - Get MN List')
     mnl = mnd.get_mnlist()
+    print('Result: {} masternodes returned'.format(len(mnl)))
 
     print('Test - Random Node: {}'.format(mnd.get_random_masternode()))
 
