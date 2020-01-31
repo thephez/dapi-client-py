@@ -118,7 +118,7 @@ class MasternodeListProvider:
 
     def get_mn_list(self):
         if (self.needs_update()):
-            print('Masternode List needs updating...')
+            #print('Masternode List needs updating...')
             self.update_mn_list()
 
         return self.masternode_list
@@ -148,31 +148,31 @@ def dapi_rpc(method, ip = 'evonet.thephez.com', port = 3000, params = {}, id = 1
         #print('Exception for {} - {}'.format(ip, payload))
         raise
 
-def check_masternode(ip):
-    try:
-        current_block_hash = dapi_rpc('getBestBlockHash', ip, 3000)
-        print('Success from {}:\t{}'.format(ip, current_block_hash))
-    except Exception as ex:
-        print('Failure from {}:\t** {} **'.format(ip, ex))
-
-def get_masternode_list():
-    params = { 'height': 0 }
-    genesis_block_hash = dapi_rpc('getBlockHash', SEED_IP, SEED_PORT, params)
-
-    current_block_hash = dapi_rpc('getBestBlockHash')
-
-    method = 'getBlockHeaders'
-    params = { 'offset': 1, 'limit': 1 }
-    dapi_rpc(method, SEED_IP, SEED_PORT, params)
-
-    method = 'getMnListDiff'
-    params = {
-        'baseBlockHash': genesis_block_hash,
-        'blockHash': current_block_hash
-    }
-    masternode_list_diff = dapi_rpc(method, SEED_IP, SEED_PORT, params)
-
-    return masternode_list_diff['mnList']
+#def check_masternode(ip):
+#    try:
+#        current_block_hash = dapi_rpc('getBestBlockHash', ip, 3000)
+#        print('Success from {}:\t{}'.format(ip, current_block_hash))
+#    except Exception as ex:
+#        print('Failure from {}:\t** {} **'.format(ip, ex))
+#
+# def get_masternode_list():
+#     params = { 'height': 0 }
+#     genesis_block_hash = dapi_rpc('getBlockHash', SEED_IP, SEED_PORT, params)
+#
+#     current_block_hash = dapi_rpc('getBestBlockHash')
+#
+#     method = 'getBlockHeaders'
+#     params = { 'offset': 1, 'limit': 1 }
+#     dapi_rpc(method, SEED_IP, SEED_PORT, params)
+#
+#     method = 'getMnListDiff'
+#     params = {
+#         'baseBlockHash': genesis_block_hash,
+#         'blockHash': current_block_hash
+#     }
+#     masternode_list_diff = dapi_rpc(method, SEED_IP, SEED_PORT, params)
+#
+#     return masternode_list_diff['mnList']
 
 def main():
     #masternode_list = get_masternode_list()
