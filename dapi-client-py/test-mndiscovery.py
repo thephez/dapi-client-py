@@ -1,6 +1,6 @@
 import json
 import time
-from MNDiscovery.mn_discovery import MNDiscovery
+from MNDiscovery.masternode_discovery import MNDiscovery
 
 def main():
     mnd = MNDiscovery()
