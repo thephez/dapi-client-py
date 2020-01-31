@@ -1,5 +1,6 @@
 import json
 import time
+from rpc.jsonrpc.jsonrpc_client import JsonRpcClient
 from MNDiscovery.masternode_discovery import MasternodeDiscovery
 
 def main():
