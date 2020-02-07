@@ -28,8 +28,11 @@ class JsonRpcClient:
 
             parsed = json.loads(response.text)
             #print('{} response:\n{}\n\n'.format(method, json.dumps(parsed, indent=4, sort_keys=True)))
-            return parsed['result']
+            if 'result' in parsed:
+                return parsed['result']
+            elif 'error' in parsed:
+                return parsed['error']
 
         except Exception as ex:
-            #print('Exception for {} - {}'.format(ip, payload))
+            print('Exception for {} - {}\n\t{}'.format(url, payload, ex))
             raise
