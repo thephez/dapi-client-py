@@ -1,3 +1,4 @@
+import sys
 from MNDiscovery.masternode_discovery import MasternodeDiscovery
 from rpc.jsonrpc.jsonrpc_client import JsonRpcClient
 
@@ -49,7 +50,7 @@ class DAPIClient:
         try:
             return self.make_request(method, params, excluded_ips)
         except Exception as ex:
-            print(ex)
+            print('Exception:\n{}'.format(ex))
             #if (err.code !== 'ECONNABORTED' && err.code !== 'ECONNREFUSED') {
             #throw err;
           #}
@@ -80,6 +81,17 @@ class DAPIClient:
                 'blockHash': blockHash
             })
 
+
+    def getUTXO(self, address, from_result=0, to_result=1000, fromHeight=0, toHeight=sys.maxsize):
+        return self.make_request_to_random_dapi_node('getUTXO',
+            {
+                'address': address,
+                'from': from_result,
+                'to': to_result,
+                'fromHeight': fromHeight,
+                'toHeight': toHeight
+            })
+            
 
 def main():
     client = DAPIClient()
