@@ -1,4 +1,22 @@
 
+# Quickstart
+
+
+```
+git clone https://github.com/thephez/dapi-client-py.git
+cd dapi-client-py
+python3 -m venv dapiclient-venv
+source dapiclient-venv/bin/activate
+pip install -r requirements.txt
+python setup.py install
+
+# Check masternode list
+python dapiclient/test-mndiscovery.py
+
+# Check DAPI client functionality
+python dapiclient/test-dapiclient.py
+```
+
 # Generating dapi-grpc proto files for Python
 
 ```shell
@@ -17,15 +35,3 @@ pip install -e
 ```
 
 
-
-```
-python3 -m venv ~/venv/dapiclient
-source ~/venv/dapiclient/bin/activate
-python setup.py install
-pip install requests
-
-python dapiclient/MNDiscovery/masternode_list_provider.py
-
-python dapiclient/test-mndiscovery.py
-
-```

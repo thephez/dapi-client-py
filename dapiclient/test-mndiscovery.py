@@ -24,10 +24,10 @@ def main():
     print('Test - Try connecting to JSON-RPC on a MN')
     mnd.check_mn_response(mnl[0]['service'].split(':')[0])
 
-    print('Test - Refresh list after timeout')
+    print('Test - Refresh list after timeout (60 seconds)')
     time.sleep(60)
     mnd.get_mnlist()
-
+    print('Test - Complete')
     #print(json.dumps(mnl, indent = 2))
 
 if __name__ == "__main__":
