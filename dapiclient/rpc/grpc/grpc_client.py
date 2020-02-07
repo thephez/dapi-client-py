@@ -15,22 +15,22 @@ class GRpcClient:
         channel = grpc.insecure_channel(socket)
         #print(socket)
 
+        stub = platform_pb2_grpc.PlatformStub(channel)
+
         if method == 'getIdentity':
-            return GRpcClient.getIdentity(channel, params, options)
+            return GRpcClient.getIdentity(stub, params, options)
 
         elif method == 'getDataContract':
-            return GRpcClient.getDataContract(channel, params, options)
+            return GRpcClient.getDataContract(stub, params, options)
 
         elif method == 'getDocuments':
-            return GRpcClient.getDocuments(channel, params, options)
+            return GRpcClient.getDocuments(stub, params, options)
 
         else:
             raise ValueError('Unknown gRPC endpoint: {}'.format(method))
 
 
-    def getIdentity(channel, params, options):
-        stub = platform_pb2_grpc.PlatformStub(channel)
-
+    def getIdentity(stub, params, options):
         # Create Identity request
         identity_request = platform_pb2.GetIdentityRequest()
         # Set identity parameter of request
@@ -40,9 +40,7 @@ class GRpcClient:
         return cbor2.loads(response.identity)
 
 
-    def getDataContract(channel, params, options):
-        stub = platform_pb2_grpc.PlatformStub(channel)
-
+    def getDataContract(stub, params, options):
         contract_request = platform_pb2.GetDataContractRequest()
         contract_request.id = params['id']
 
@@ -52,8 +50,7 @@ class GRpcClient:
         return cbor2.loads(response.data_contract)
 
 
-    def getDocuments(channel, params, options):
-        stub = platform_pb2_grpc.PlatformStub(channel)
+    def getDocuments(stub, params, options):
         #print(params)
 
         document_request = platform_pb2.GetDocumentsRequest()
@@ -63,7 +60,6 @@ class GRpcClient:
         document_request.start_at =  params['start_at']
 
         response = stub.getDocuments(document_request, options['timeout'])
-        #print('Data Contract: {}\n'.format(cbor2.loads(response.data_contract)))
 
         #for d in response.documents:
         #    print('Document cbor: {}\n'.format(cbor2.loads(d)))
