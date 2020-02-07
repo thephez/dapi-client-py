@@ -1,8 +1,12 @@
 import sys
 from MNDiscovery.masternode_discovery import MasternodeDiscovery
 from rpc.jsonrpc.jsonrpc_client import JsonRpcClient
+from rpc.grpc.grpc_client import GRpcClient
 
 SEED_PORT = 3000
+SEED_PORT_GRPC = 3010
+GRPC_REQUEST_TIMEOUT = 5
+GRPC_MAX_RESULTS = 100
 
 class DAPIClient:
     """docstring for DAPIClient."""
@@ -10,7 +14,7 @@ class DAPIClient:
     def __init__(self, options = {}):
         self.mn_discovery = MasternodeDiscovery() #options['seeds'], options['port'])
         self.dapi_port = SEED_PORT #if options.port not in options else options.port
-        #self.native_grpc_port = options.nativeGrpcPort || config.grpc.nativePort;
+        self.native_grpc_port = SEED_PORT_GRPC #options.nativeGrpcPort || config.grpc.nativePort;
         self.timeout = 2000 #options.timeout || 2000;
         #self.forceJsonRpc = options.forceJsonRpc;
         #preconditionsUtil.checkArgument(jsutil.isUnsignedInteger(self.timeout),
@@ -32,7 +36,7 @@ class DAPIClient:
         #print(method)
         #self.make_request['call_count'] += 1
         random_masternode = self.mn_discovery.get_random_masternode(excluded_ips)
-        print(random_masternode)
+        #print(random_masternode)
         return JsonRpcClient.request({
           'host': random_masternode.split(':')[0],
           'port': self.dapi_port,
@@ -91,7 +95,51 @@ class DAPIClient:
                 'fromHeight': fromHeight,
                 'toHeight': toHeight
             })
-            
+
+    # gRPC endpoints
+
+    def make_request_to_random_dapi_grpc_node(self, method, params = {}, options = {}, excluded_ips = []):
+        #self.make_request['call_count'] = 0;
+        random_masternode = self.mn_discovery.get_random_masternode()
+        ip = random_masternode.split(":")[0]
+        socket = '{}:{}'.format(ip, self.native_grpc_port)
+
+        options = {
+            'timeout': GRPC_REQUEST_TIMEOUT
+        }
+
+        return GRpcClient.request(socket, method, params, options)
+
+
+    def getIdentity(self, id):
+        return self.make_request_to_random_dapi_grpc_node(
+                'getIdentity',
+                {
+                    'id': id
+                }
+            )
+
+
+    def getDataContract(self, id):
+        return self.make_request_to_random_dapi_grpc_node(
+                'getDataContract',
+                {
+                    'id': id
+                }
+            )
+
+    def getDocuments(self, data_contract_id, document_type, limit=GRPC_MAX_RESULTS, start_at=0):
+        # TODO: implement where, order_by, and start_after
+        return self.make_request_to_random_dapi_grpc_node(
+                'getDocuments',
+                {
+                    'data_contract_id': data_contract_id,
+                    'document_type': document_type,
+                    'limit': limit,
+                    'start_at': start_at
+                }
+            )
+
 
 def main():
     client = DAPIClient()
