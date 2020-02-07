@@ -1,0 +1,4 @@
+cbor2==5.0.1
+requests==2.22.0
+protobuf==3.11.3
+grpcio==1.26.0
