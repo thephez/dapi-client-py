@@ -1,5 +1,4 @@
-cbor2==5.0.1
+cbor2==5.1.0
 requests==2.22.0
 protobuf==3.11.3
 grpcio==1.26.0
-wheel==0.34.2
