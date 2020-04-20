@@ -2,6 +2,13 @@ A very basic DAPI client. Only supports retrieving from some JSON-RPC and gRPC
 endpoints. No validation of anything. No submitting of data, tx creation,
 signing, etc.
 
+# Requirements
+
+```
+python3
+python3-venv
+```
+
 # Quickstart
 
 
