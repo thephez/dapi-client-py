@@ -112,6 +112,14 @@ class DAPIClient:
 
         return GRpcClient.request(socket, method, params, options)
 
+    def getBlock(self, hash, height=0):
+        return self.make_request_to_random_dapi_grpc_node(
+                'getBlock',
+                {
+                    'hash': hash,
+                    'height': height
+                }
+            )
 
     def getIdentity(self, id):
         return self.make_request_to_random_dapi_grpc_node(

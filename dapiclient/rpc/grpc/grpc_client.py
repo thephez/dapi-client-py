@@ -26,6 +26,9 @@ class GRpcClient:
         elif method == 'getDocuments':
             return GRpcClient.getDocuments(stub, params, options)
 
+        elif method == 'getBlock':
+            return GRpcClient.getBlock(stub, params, options)
+
         else:
             raise ValueError('Unknown gRPC endpoint: {}'.format(method))
 
@@ -65,3 +68,11 @@ class GRpcClient:
         #    print('Document cbor: {}\n'.format(cbor2.loads(d)))
 
         return response.documents
+
+    def getBlock(stub, params, options):
+        block_request = platform_pb2.GetBlockRequest()
+        block_request.hash = params['hash']
+        block_request.height = params['height']
+
+        response = stub.getBlock(block_request, options['height'])
+        return cbor2.loads(response.block)

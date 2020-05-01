@@ -25,22 +25,24 @@ def jsonrpc_tests():
 
 # gRPC
 def grpc_tests():
-    id = client.getIdentity('Bb2p582MFR1tQhVQHKrScsAJH6Erqsb6SoroD9dQhJ5e')
-    print('Test - getIdentity:\n{}\n'.format(id))
+    # id = client.getIdentity('Bb2p582MFR1tQhVQHKrScsAJH6Erqsb6SoroD9dQhJ5e')
+    # print('Test - getIdentity:\n{}\n'.format(id))
 
-    contract = client.getDataContract('2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse')
-    print('Test - getDataContract:\n{}\n'.format(contract))
+    # contract = client.getDataContract('2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse')
+    # print('Test - getDataContract:\n{}\n'.format(contract))
 
-    docs = client.getDocuments(
-        '2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse',
-        'domain',
-        limit=5,
-        start_at=2
-    )
-    print('Test - getDocuments: {} documents retrieved (max of 100)'.format(len(docs)))
-    for doc in docs:
-        print('Document:\n\t{}\n'.format(cbor2.loads(doc)))
+    # docs = client.getDocuments(
+    #     '2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse',
+    #     'domain',
+    #     limit=5,
+    #     start_at=2
+    # )
+    # print('Test - getDocuments: {} documents retrieved (max of 100)'.format(len(docs)))
+    # for doc in docs:
+    #     print('Document:\n\t{}\n'.format(cbor2.loads(doc)))
 
+    block = client.getBlock('000001e14d5057455958769a389ae8975c9dd34dae3dac6cde6e7167afde847d')
+    print('Test - getBlock:\n{}\n'.format(block))
 
 #raise Exception('exit execution early')
 
