@@ -1,5 +1,7 @@
 import grpc
 
+import rpc.grpc.core_pb2 as core_pb2
+import rpc.grpc.core_pb2_grpc as core_pb2_grpc
 import rpc.grpc.platform_pb2 as platform_pb2
 import rpc.grpc.platform_pb2_grpc as platform_pb2_grpc
 #import platform_resources
@@ -11,6 +13,7 @@ GRPC_REQUEST_TIMEOUT = 5
 # Set up connection
 channel = grpc.insecure_channel('evonet.thephez.com:3010')
 stub = platform_pb2_grpc.PlatformStub(channel)
+stubCore = core_pb2_grpc.CoreStub(channel)
 
 
 def get_identity(id):
@@ -53,13 +56,22 @@ def get_documents(contract_id, type, options):
     for d in docs.documents:
         print('Document cbor: {}\n'.format(cbor2.loads(d)))
 
+def get_block(height):
+    # Get Block
+    block_request = core_pb2.GetBlockRequest()
+    block_request.height = height
+
+    block = stubCore.getBlock(block_request, GRPC_REQUEST_TIMEOUT)
+    print('getBlock Response: {}\n'.format(cbor2.loads(block.block)))
+
 def main():
     identity_id = 'Bb2p582MFR1tQhVQHKrScsAJH6Erqsb6SoroD9dQhJ5e'
     dpns_contract_id = '2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse'
 
-    get_identity(identity_id)
-    get_data_contract(dpns_contract_id)
-    get_documents(dpns_contract_id, 'domain', 'limit = 2')
+    #get_identity(identity_id)
+    #get_data_contract(dpns_contract_id)
+    #get_documents(dpns_contract_id, 'domain', 'limit = 2')
+    get_block(1)
 
 if __name__ == "__main__":
     main()

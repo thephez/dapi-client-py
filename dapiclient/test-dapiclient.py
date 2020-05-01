@@ -23,29 +23,6 @@ def jsonrpc_tests():
     print('Test - getAddressSummary (address: {}): {}\n' .format(address, getAddressSummary))
     return mnlist_diff
 
-# gRPC
-def grpc_tests():
-    # id = client.getIdentity('Bb2p582MFR1tQhVQHKrScsAJH6Erqsb6SoroD9dQhJ5e')
-    # print('Test - getIdentity:\n{}\n'.format(id))
-
-    # contract = client.getDataContract('2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse')
-    # print('Test - getDataContract:\n{}\n'.format(contract))
-
-    # docs = client.getDocuments(
-    #     '2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse',
-    #     'domain',
-    #     limit=5,
-    #     start_at=2
-    # )
-    # print('Test - getDocuments: {} documents retrieved (max of 100)'.format(len(docs)))
-    # for doc in docs:
-    #     print('Document:\n\t{}\n'.format(cbor2.loads(doc)))
-
-    block = client.getBlock('000001e14d5057455958769a389ae8975c9dd34dae3dac6cde6e7167afde847d')
-    print('Test - getBlock:\n{}\n'.format(block))
-
-#raise Exception('exit execution early')
-
 def jsonrpc_comm_test(mnlist_diff):
     print('Test - Check for JSON-RPC response from all masternodes')
     for mn in mnlist_diff['mnList']:
@@ -60,9 +37,7 @@ def jsonrpc_comm_test(mnlist_diff):
 def main():
     mnlist_diff = jsonrpc_tests()
 
-    #jsonrpc_comm_test(mnlist_diff)
-
-    grpc_tests()
+    jsonrpc_comm_test(mnlist_diff)
 
 
 if __name__ == "__main__":

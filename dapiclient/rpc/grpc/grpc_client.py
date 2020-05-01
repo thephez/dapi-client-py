@@ -2,6 +2,8 @@ import grpc
 import cbor2
 
 # Generated from dapi-grpc
+import rpc.grpc.core_pb2 as core_pb2
+import rpc.grpc.core_pb2_grpc as core_pb2_grpc
 import rpc.grpc.platform_pb2 as platform_pb2
 import rpc.grpc.platform_pb2_grpc as platform_pb2_grpc
 
@@ -16,6 +18,7 @@ class GRpcClient:
         #print(socket)
 
         stub = platform_pb2_grpc.PlatformStub(channel)
+        stubCore = core_pb2_grpc.CoreStub(channel)
 
         if method == 'getIdentity':
             return GRpcClient.getIdentity(stub, params, options)
@@ -27,7 +30,7 @@ class GRpcClient:
             return GRpcClient.getDocuments(stub, params, options)
 
         elif method == 'getBlock':
-            return GRpcClient.getBlock(stub, params, options)
+            return GRpcClient.getBlock(stubCore, params, options)
 
         else:
             raise ValueError('Unknown gRPC endpoint: {}'.format(method))
@@ -69,10 +72,10 @@ class GRpcClient:
 
         return response.documents
 
-    def getBlock(stub, params, options):
-        block_request = platform_pb2.GetBlockRequest()
+    def getBlock(stubCore, params, options):
+        block_request = core_pb2.GetBlockRequest()
         block_request.hash = params['hash']
         block_request.height = params['height']
 
-        response = stub.getBlock(block_request, options['height'])
+        response = stubCore.getBlock(block_request, options['timeout'])
         return cbor2.loads(response.block)
