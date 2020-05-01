@@ -18,6 +18,9 @@ def jsonrpc_tests():
     utxo = client.getUTXO('yPprxZrUL8UN73qLDS2xCg6yBFGieUWz7Q')#, 2)
     print('Test - getUTXO:\n{}\n'.format(utxo))
 
+    address = 'yVs4HGmHgzP4t3gZ7KrpxRzCmkQcvZmczd'
+    getAddressSummary = client.getAddressSummary(address)
+    print('Test - getAddressSummary (address: {}): {}\n' .format(address, getAddressSummary))
     return mnlist_diff
 
 # gRPC

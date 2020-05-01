@@ -69,6 +69,8 @@ class DAPIClient:
 
             raise Exception('max retries to connect to DAPI node reached');
 
+    def getAddressSummary(self, address):
+        return self.make_request_to_random_dapi_node('getAddressSummary', {'address': [address]})
 
     def getBestBlockHash(self):
         return self.make_request_to_random_dapi_node('getBestBlockHash')
