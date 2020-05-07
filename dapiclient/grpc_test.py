@@ -7,6 +7,7 @@ import rpc.grpc.platform_pb2_grpc as platform_pb2_grpc
 #import platform_resources
 
 import cbor2
+import base64
 
 GRPC_REQUEST_TIMEOUT = 5
 
@@ -38,7 +39,7 @@ def get_data_contract(contract_id):
     contract_request.id = contract_id
 
     data_contract = stub.getDataContract(contract_request, GRPC_REQUEST_TIMEOUT)
-    #print(data_contract)
+    print(data_contract)
     print('Data Contract: {}\n'.format(cbor2.loads(data_contract.data_contract)))
 
 def get_documents(contract_id, type, options):
@@ -62,23 +63,32 @@ def get_block(height):
     block_request.height = height
 
     block_response = stubCore.getBlock(block_request, GRPC_REQUEST_TIMEOUT)
-    print('getBlock Response: {}\n'.format(cbor2.loads(block_response.block)))
+    print('Block: {}\n'.format(block_response.block))
 
 def get_status():
     status_request = core_pb2.GetStatusRequest()
 
     status_response = stubCore.getStatus(status_request, GRPC_REQUEST_TIMEOUT)
-    print('getStatus Response: {}\n'.format(status_response))
+    print('Status: {}\n'.format(status_response))
+
+def get_transaction(id):
+    transaction_request = core_pb2.GetTransactionRequest()
+    transaction_request.id = id
+
+    transaction_response = stubCore.getTransaction(transaction_request, GRPC_REQUEST_TIMEOUT)
+    print('Transaction: {}\n'.format(transaction_response.transaction))
 
 def main():
-    identity_id = 'Bb2p582MFR1tQhVQHKrScsAJH6Erqsb6SoroD9dQhJ5e'
-    dpns_contract_id = '2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse'
+    identity_id = 'JCaTiRxm4dRN1GJqoNkpowmvisC7BbgPW48pJ6roLSgw'
+    dpns_contract_id = '5wpZAEWndYcTeuwZpkmSa8s49cHXU5q2DhdibesxFSu8'
+    transaction_id = '29b68163a22d89c14e24f1281cb4608b8dc7be05bc2604e2cecf8a85b1dede0d'
 
-    #get_identity(identity_id)
-    #get_data_contract(dpns_contract_id)
-    #get_documents(dpns_contract_id, 'domain', 'limit = 2')
+    get_identity(identity_id)
+    get_data_contract(dpns_contract_id)
+    get_documents(dpns_contract_id, 'note', 'limit = 2')
     get_block(1)
     get_status()
+    get_transaction(transaction_id)
 
 if __name__ == "__main__":
     main()

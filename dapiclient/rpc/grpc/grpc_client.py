@@ -34,6 +34,8 @@ class GRpcClient:
 
         elif method == 'getStatus':
             return GRpcClient.getStatus(stubCore, params, options)
+        elif method == 'getTransaction':
+            return GRpcClient.getTransaction(stubCore, params, options)
         else:
             raise ValueError('Unknown gRPC endpoint: {}'.format(method))
 
@@ -88,3 +90,11 @@ class GRpcClient:
         response = stubCore.getStatus(status_request, options['timeout'])
 
         return response
+
+    def getTransaction(stubCore, params, options):
+        transaction_request = core_pb2.GetTransactionRequest()
+        transaction_request.id = params['id']
+
+        response = stubCore.getTransaction(transaction_request, options['timeout'])
+
+        return cbor2.loads(response.transaction)

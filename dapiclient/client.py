@@ -126,6 +126,14 @@ class DAPIClient:
                 'getStatus'
         )
 
+    def getTransaction(self, id):
+        return self.make_request_to_random_dapi_grpc_node(
+                'getTransaction',
+                {
+                    'id': id
+                }
+        )
+
     def getIdentity(self, id):
         return self.make_request_to_random_dapi_grpc_node(
                 'getIdentity',
