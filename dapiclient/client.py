@@ -121,6 +121,11 @@ class DAPIClient:
                 }
             )
 
+    def getStatus(self):
+        return self.make_request_to_random_dapi_grpc_node(
+                'getStatus'
+        )
+
     def getIdentity(self, id):
         return self.make_request_to_random_dapi_grpc_node(
                 'getIdentity',

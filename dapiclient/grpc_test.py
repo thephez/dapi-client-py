@@ -61,8 +61,14 @@ def get_block(height):
     block_request = core_pb2.GetBlockRequest()
     block_request.height = height
 
-    block = stubCore.getBlock(block_request, GRPC_REQUEST_TIMEOUT)
-    print('getBlock Response: {}\n'.format(cbor2.loads(block.block)))
+    block_response = stubCore.getBlock(block_request, GRPC_REQUEST_TIMEOUT)
+    print('getBlock Response: {}\n'.format(cbor2.loads(block_response.block)))
+
+def get_status():
+    status_request = core_pb2.GetStatusRequest()
+
+    status_response = stubCore.getStatus(status_request, GRPC_REQUEST_TIMEOUT)
+    print('getStatus Response: {}\n'.format(status_response))
 
 def main():
     identity_id = 'Bb2p582MFR1tQhVQHKrScsAJH6Erqsb6SoroD9dQhJ5e'
@@ -72,6 +78,7 @@ def main():
     #get_data_contract(dpns_contract_id)
     #get_documents(dpns_contract_id, 'domain', 'limit = 2')
     get_block(1)
+    get_status()
 
 if __name__ == "__main__":
     main()
