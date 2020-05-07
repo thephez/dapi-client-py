@@ -134,6 +134,16 @@ class DAPIClient:
                 }
         )
 
+    def sendTransaction(self, transaction, allow_high_fees=0, bypass_limits=0):
+        return self.make_request_to_random_dapi_grpc_node(
+                'sendTransaction',
+                {
+                    'transaction': transaction,
+                    'allow_high_fees': allow_high_fees,
+                    'bypass_limits': bypass_limits
+                }
+        )
+
     def getIdentity(self, id):
         return self.make_request_to_random_dapi_grpc_node(
                 'getIdentity',

@@ -78,6 +78,15 @@ def get_transaction(id):
     transaction_response = stubCore.getTransaction(transaction_request, GRPC_REQUEST_TIMEOUT)
     print('Transaction: {}\n'.format(transaction_response.transaction))
 
+def send_transaction(transaction, allow_high_fees=0, bypass_limits=0):
+    transaction_request = core_pb2.SendTransactionRequest()
+    transaction_request.transaction = transaction
+    transaction_request.allow_high_fees = allow_high_fees
+    transaction_request.bypass_limits = bypass_limits
+
+    transaction_response = stubCore.sendTransaction(transaction_request, GRPC_REQUEST_TIMEOUT)
+    print('Transaction: {}\n'.format(transaction_response))
+
 def main():
     identity_id = 'JCaTiRxm4dRN1GJqoNkpowmvisC7BbgPW48pJ6roLSgw'
     dpns_contract_id = '5wpZAEWndYcTeuwZpkmSa8s49cHXU5q2DhdibesxFSu8'
@@ -89,6 +98,7 @@ def main():
     get_block(1)
     get_status()
     get_transaction(transaction_id)
+    send_transaction(b'020000000123c52118bfc5da0222a569d379ce3e3a9ca18976175785fd45b3f8990341768b000000006b483045022100a3952306ccb38e1eb22d9956ab40744b79e3072621e634e19225ad8a15603e3102201a3724cb9a8216e78139793c953245b0890c207e13af86bb02735f50a5bccad9012103439cfc2b5fab7fe05c0fbf8fa9217707a5bf5badb7c7e6db05bd0fb1231c5c8bfeffffff0200e1f505000000001976a91468b39aad690ffb710b4ba522d742670b763b501988ac1ec34f95010000001976a91445ada709129f7b6381559c8a16f1ec83c0b3ca8c88acb4240000')
 
 if __name__ == "__main__":
     main()
