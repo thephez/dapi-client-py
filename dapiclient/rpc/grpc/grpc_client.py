@@ -129,7 +129,10 @@ class GRpcClient:
         subscribe_request.from_block_height = params['from_block_height']
         subscribe_request.count = params['count']
         subscribe_request.send_transaction_hashes = params['send_transaction_hashes']
-        subscribe_request.bloom_filter = params['bloom_filter']
+        setattr(subscribe_request.bloom_filter,'n_hash_funcs',params['bloom_filter']['n_hash_funcs'])
+        setattr(subscribe_request.bloom_filter,'v_data',params['bloom_filter']['v_data'])
+        setattr(subscribe_request.bloom_filter,'n_tweak',params['bloom_filter']['n_tweak'])
+        setattr(subscribe_request.bloom_filter,'n_flags',params['bloom_filter']['n_flags'])
 
         response = stubTransactions.transactionWithProof(subscribe_request, options['timeout'])
 

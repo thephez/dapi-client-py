@@ -96,13 +96,13 @@ def subscribeToTransactionsWithProofs(bloom_filter, from_block_hash=b'', from_bl
     subscribe_request.from_block_height = from_block_height
     subscribe_request.count = count
     subscribe_request.send_transaction_hashes = send_transaction_hashes
-    # subscribe_request.bloom_filter['n_hash_funcs'] = bloom_filter['n_hash_funcs']
-    # subscribe_request.bloom_filter['v_data'] = bloom_filter['v_data']
-    # subscribe_request.bloom_filter['n_tweak'] = bloom_filter['n_tweak']
-    # subscribe_request.bloom_filter['n_flags'] = bloom_filter['n_flags']
+    setattr(subscribe_request.bloom_filter,'n_hash_funcs',bloom_filter['n_hash_funcs'])
+    setattr(subscribe_request.bloom_filter,'v_data',bloom_filter['v_data'])
+    setattr(subscribe_request.bloom_filter,'n_tweak',bloom_filter['n_tweak'])
+    setattr(subscribe_request.bloom_filter,'n_flags',bloom_filter['n_flags'])
 
     response = stubTransactions.subscribeToTransactionsWithProofs(subscribe_request, GRPC_REQUEST_TIMEOUT)
-
+    
     return response
 
 def main():
@@ -112,7 +112,7 @@ def main():
 
     bloom_filter = {
         "n_hash_funcs": 11,
-        "v_data": "",
+        "v_data": b'',
         "n_tweak": 0,
         "n_flags": 0
     }
