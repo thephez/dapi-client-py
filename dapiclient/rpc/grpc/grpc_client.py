@@ -77,8 +77,11 @@ class GRpcClient:
         document_request = platform_pb2.GetDocumentsRequest()
         document_request.data_contract_id = params['data_contract_id']
         document_request.document_type =  params['document_type']
+        document_request.where = params['where']
+        document_request.order_by = params['order_by']
         document_request.limit =  params['limit']
         document_request.start_at =  params['start_at']
+        document_request.start_after = params['start_after']
 
         response = stub.getDocuments(document_request, options['timeout'])
 

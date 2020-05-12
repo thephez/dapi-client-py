@@ -173,15 +173,17 @@ class DAPIClient:
                 }
             )
 
-    def getDocuments(self, data_contract_id, document_type, limit=GRPC_MAX_RESULTS, start_at=0):
-        # TODO: implement where, order_by, and start_after
+    def getDocuments(self, data_contract_id, document_type, where=b'', order_by=b'', limit=GRPC_MAX_RESULTS, start_at=0, start_after=0):
         return self.make_request_to_random_dapi_grpc_node(
                 'getDocuments',
                 {
                     'data_contract_id': data_contract_id,
                     'document_type': document_type,
+                    'where': where,
+                    'order_by': order_by,
                     'limit': limit,
-                    'start_at': start_at
+                    'start_at': start_at,
+                    'start_after': start_after
                 }
             )
 

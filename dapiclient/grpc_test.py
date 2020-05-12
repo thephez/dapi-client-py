@@ -90,9 +90,9 @@ def send_transaction(transaction, allow_high_fees=0, bypass_limits=0):
     transaction_response = stubCore.sendTransaction(transaction_request, GRPC_REQUEST_TIMEOUT)
     print('Transaction: {}\n'.format(transaction_response))
 
-def subscribeToTransactionsWithProofs(bloom_filter, from_block_hash=bytearray(), from_block_height=0, count=0, send_transaction_hashes=0):
+def subscribeToTransactionsWithProofs(bloom_filter, from_block_hash=b'', from_block_height=0, count=0, send_transaction_hashes=0):
     subscribe_request = transactions_filter_stream_pb2.TransactionsWithProofsRequest()
-    # subscribe_request.from_block_hash = from_block_hash
+    subscribe_request.from_block_hash = from_block_hash
     subscribe_request.from_block_height = from_block_height
     subscribe_request.count = count
     subscribe_request.send_transaction_hashes = send_transaction_hashes
@@ -118,7 +118,7 @@ def main():
     }
 
 
-    subscribeToTransactionsWithProofs(bloom_filter,bytearray(),1,1,0)
+    subscribeToTransactionsWithProofs(bloom_filter,from_block_height=1,count=1,send_transaction_hashes=0)
     get_identity(identity_id)
     get_data_contract(dpns_contract_id)
     get_documents(dpns_contract_id, 'note', 'limit = 2')
