@@ -6,6 +6,8 @@ import rpc.grpc.core_pb2 as core_pb2
 import rpc.grpc.core_pb2_grpc as core_pb2_grpc
 import rpc.grpc.platform_pb2 as platform_pb2
 import rpc.grpc.platform_pb2_grpc as platform_pb2_grpc
+import rpc.grpc.transactions_filter_stream_pb2 as transactions_filter_stream_pb2
+import rpc.grpc.transactions_filter_stream_pb2_grpc as transactions_filter_stream_pb2_grpc
 
 
 class GRpcClient:
@@ -19,6 +21,7 @@ class GRpcClient:
 
         stub = platform_pb2_grpc.PlatformStub(channel)
         stubCore = core_pb2_grpc.CoreStub(channel)
+        stubTransactions = transactions_filter_stream_pb2_grpc.TransactionsFilterStreamStub(channel)
 
         if method == 'getIdentity':
             return GRpcClient.getIdentity(stub, params, options)
@@ -40,6 +43,9 @@ class GRpcClient:
 
         elif method == 'sendTransaction':
             return GRpcClient.sendTransaction(stubCore, params, options)
+
+        elif method == 'subscribeToTransactionsWithProofs':
+            return GRpcClient.subscribeToTransactionsWithProofs(stubTransactions, params, options)
 
         else:
             raise ValueError('Unknown gRPC endpoint: {}'.format(method))
@@ -111,5 +117,17 @@ class GRpcClient:
         transaction_request.bypass_limits = params['bypass_limits']
 
         response = stubCore.sendTransaction(transaction_request, options['timeout'])
+
+        return response
+
+    def subscribeToTransactionsWithProofs(stubTransactions, params, options):
+        subscribe_request = transactions_filter_stream_pb2.TransactionsWithProofsRequest()
+        subscribe_request.from_block_hash = params['from_block_hash']
+        subscribe_request.from_block_height = params['from_block_height']
+        subscribe_request.count = params['count']
+        subscribe_request.send_transaction_hashes = params['send_transaction_hashes']
+        subscribe_request.bloom_filter = params['bloom_filter']
+
+        response = stubTransactions.transactionWithProof(subscribe_request, options['timeout'])
 
         return response

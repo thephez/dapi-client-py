@@ -112,7 +112,19 @@ class DAPIClient:
 
         return GRpcClient.request(socket, method, params, options)
 
-    def getBlock(self, hash, height=0):
+    def subscribeToTransactionsWithProofs(self, bloom_filter, from_block_hash, from_block_height, count=0, send_transaction_hashes=0):
+        return self.make_request_to_random_dapi_grpc_node(
+                'subscribeToTransactionsWithProofs',
+                {
+                    'bloom_filter': bloom_filter,
+                    'from_block_hash': from_block_hash,
+                    'from_block_height': from_block_height,
+                    'count': count,
+                    'send_transaction_hashes': send_transaction_hashes
+                }
+        )
+
+    def getBlock(self, hash=0, height=0):
         return self.make_request_to_random_dapi_grpc_node(
                 'getBlock',
                 {
