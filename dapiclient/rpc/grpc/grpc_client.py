@@ -32,6 +32,9 @@ class GRpcClient:
         elif method == 'getDocuments':
             return GRpcClient.getDocuments(stub, params, options)
 
+        elif method == 'applyStateTransition':
+            return GRpcClient.applyStateTransition(stub,params, options)
+
         elif method == 'getBlock':
             return GRpcClient.getBlock(stubCore, params, options)
 
@@ -135,5 +138,13 @@ class GRpcClient:
         setattr(subscribe_request.bloom_filter,'n_flags',params['bloom_filter']['n_flags'])
 
         response = stubTransactions.transactionWithProof(subscribe_request, options['timeout'])
+
+        return response
+
+    def applyStateTransition(stub, params, options):
+        apply_request = platform_pb2.ApplyStateTransitionRequest()
+        apply_request.state_transition = params['state_transition']
+
+        response = stub.applyStateTransition(apply_request, options['timeout'])
 
         return response

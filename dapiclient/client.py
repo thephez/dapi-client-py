@@ -187,6 +187,13 @@ class DAPIClient:
                 }
             )
 
+    def applyStateTransition(self, state_transition):
+        return self.make_request_to_random_dapi_grpc_node(
+                'applyStateTransition',
+                {
+                    'state_transition': state_transition
+                }
+            )
 
 def main():
     client = DAPIClient()
