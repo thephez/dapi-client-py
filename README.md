@@ -13,7 +13,7 @@ python3-venv
 
 
 ```
-git clone https://github.com/thephez/dapi-client-py.git
+git clone https://github.com/10xcryptodev/dapi-client-py.git
 cd dapi-client-py
 python3 -m venv dapiclient-venv
 source dapiclient-venv/bin/activate
