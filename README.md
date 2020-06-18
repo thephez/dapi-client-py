@@ -54,19 +54,18 @@ import cbor2
 
 client = DAPIClient()
 
-id = client.getIdentity('Bb2p582MFR1tQhVQHKrScsAJH6Erqsb6SoroD9dQhJ5e')
+id = client.getIdentity('C7id2mah2RkiroiTy6h134hLgS6A47jhh5x91tvw16bz')
 print(id)
 
 # Retrieve DPNS contract
-contract = client.getDataContract('2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse')
+contract = client.getDataContract('ARQGUnPH3YMK8FZuqwUjnTWEF6Zu4Cf3sT6e1Ruu1RXk')
 print(contract)
 
 # Retrieve 5 domain names from DPNS
 docs = client.getDocuments(
-    '2KfMcMxktKimJxAZUeZwYkFUsEcAZhDKEpQs8GMnpUse',
-    'domain',
-    limit=5,
-    start_at=2
+    'ARQGUnPH3YMK8FZuqwUjnTWEF6Zu4Cf3sT6e1Ruu1RXk',
+    'note',
+    limit=1
 )
 print('{} documents retrieved'.format(len(docs)))
 for doc in docs:
