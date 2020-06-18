@@ -14,7 +14,7 @@ import base64
 GRPC_REQUEST_TIMEOUT = 5
 
 # Set up connection
-channel = grpc.insecure_channel('evonet.thephez.com:3010')
+channel = grpc.insecure_channel('seed-1.evonet.networks.dash.org:3010')
 stub = platform_pb2_grpc.PlatformStub(channel)
 stubCore = core_pb2_grpc.CoreStub(channel)
 stubTransactions = transactions_filter_stream_pb2_grpc.TransactionsFilterStreamStub(channel)
@@ -114,9 +114,9 @@ def applyStateTransition(state_transition):
     return response
 
 def main():
-    identity_id = 'JCaTiRxm4dRN1GJqoNkpowmvisC7BbgPW48pJ6roLSgw'
-    dpns_contract_id = '5wpZAEWndYcTeuwZpkmSa8s49cHXU5q2DhdibesxFSu8'
-    transaction_id = '29b68163a22d89c14e24f1281cb4608b8dc7be05bc2604e2cecf8a85b1dede0d'
+    identity_id = 'C7id2mah2RkiroiTy6h134hLgS6A47jhh5x91tvw16bz'
+    dpns_contract_id = 'ARQGUnPH3YMK8FZuqwUjnTWEF6Zu4Cf3sT6e1Ruu1RXk'
+    transaction_id = '0f8409a5239150bc9a12c2d3b9a430dcc515ef562906a46e2bfb3ba418d8c9e3'
 
     bloom_filter = {
         "n_hash_funcs": 11,
@@ -125,14 +125,14 @@ def main():
         "n_flags": 0
     }
 
-    subscribeToTransactionsWithProofs(bloom_filter,from_block_height=1,count=1,send_transaction_hashes=0)
     get_identity(identity_id)
     get_data_contract(dpns_contract_id)
     get_documents(dpns_contract_id, 'note', 'limit = 2')
-    get_block('000000079cac3c9e8f40d200589d3935df984fcb89bbbe46f24653b7ccfb5e9c',1)
+    get_block('000000079cac3c9e8f40d200589d3935df984fcb89bbbe46f24653b7ccfb5e9c', 1)
     get_status()
     get_transaction(transaction_id)
-    send_transaction(b'020000000123c52118bfc5da0222a569d379ce3e3a9ca18976175785fd45b3f8990341768b000000006b483045022100a3952306ccb38e1eb22d9956ab40744b79e3072621e634e19225ad8a15603e3102201a3724cb9a8216e78139793c953245b0890c207e13af86bb02735f50a5bccad9012103439cfc2b5fab7fe05c0fbf8fa9217707a5bf5badb7c7e6db05bd0fb1231c5c8bfeffffff0200e1f505000000001976a91468b39aad690ffb710b4ba522d742670b763b501988ac1ec34f95010000001976a91445ada709129f7b6381559c8a16f1ec83c0b3ca8c88acb4240000')
+    subscribeToTransactionsWithProofs(bloom_filter, from_block_height=1, count=1, send_transaction_hashes=0)
+    send_transaction(b'03000000014f83880b387e1d4a639f8dd59083ab68f464516a060e4725cc1530a0ee2c3d41000000006b483045022100e7ea589971130f6221ec129b66696ecdd359576b7421e8ee5ab0c7e8c4dc3c460220075c25bd0384148de5636af8bc16f4cc271156d20a3eae26e6b590bfc84033d2012103a65caff6ca4c0415a3ac182dfc2a6d3a4dceb98e8b831e71501df38aa156f2c1ffffffff02204e0000000000001976a91409cf4b155dd5ca22979c1390df14aaaa1009bbee88ac44701a3d050000001976a91416b93a3b9168a20605cc3cda62f6135a3baa531a88ac00000000')
     applyStateTransition(b'pmR0eXBlAmdhY3Rpb25zgQFpZG9jdW1lbnRzgaZkJHJldgFlJHR5cGVocHJlb3JkZXJnJHVzZXJJZHgsR0pNVm51UzdYVFhkaWtnalFyRDR0TjVaSkNYem02eE12R0dyNVNkdGVjcDFoJGVudHJvcHl4InlVOXVta1Q0QnZjQWpQSmpGRVRGNW9CbUgzdEEyU3FKS2drJGNvbnRyYWN0SWR4LDJLZk1jTXhrdEtpbUp4QVpVZVp3WWtGVXNFY0FaaERLRXBRczhHTW5wVXNlcHNhbHRlZERvbWFpbkhhc2h4XjU2MmQ4Y2Q1YTQ1Nzg4ZWU0MWM3YzNiYWNhZGU5ODMwNGY0MTk0MzkyOTA4NDgxMzljOWZiZDU2MTI3NDY1NzM3NDJlNzQ2ODY1NzA2ODY1N2EzMzJlNjQ2MTczNjhpc2lnbmF0dXJleFhIMkxxMW5pM1cyR0Q0TXlqK3lzSHdOMExKRXdHSjExMTRaTHExL0dTalJxakliY2Z0VzcvUkpZVFozeFhnOW0wTTJ4SnVJSEwvMzVGUFVUdUkxUUFBSTg9b3Byb3RvY29sVmVyc2lvbgB0c2lnbmF0dXJlUHVibGljS2V5SWQB')
 
 if __name__ == "__main__":
