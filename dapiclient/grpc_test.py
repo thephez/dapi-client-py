@@ -105,6 +105,14 @@ def getIdentityByFirstPublicKey(public_key_hash):
     print('getIdentityByFirstPublicKey: {}\n'.format(response))
 
 
+def getIdentityIdByFirstPublicKey(public_key_hash):
+    request = platform_pb2.GetIdentityIdByFirstPublicKeyRequest()
+    request.public_key_hash = public_key_hash
+
+    response = stub.getIdentityIdByFirstPublicKey(request, GRPC_REQUEST_TIMEOUT)
+    print('getIdentityIdByFirstPublicKey: {}\n'.format(response))
+
+
 def subscribeToTransactionsWithProofs(bloom_filter, from_block_hash=b'', from_block_height=0, count=0, send_transaction_hashes=0):
     subscribe_request = transactions_filter_stream_pb2.TransactionsWithProofsRequest()
     subscribe_request.from_block_hash = from_block_hash
@@ -150,6 +158,7 @@ def main():
     get_transaction(transaction_id)
     subscribeToTransactionsWithProofs(bloom_filter, from_block_height=1, count=1, send_transaction_hashes=0)
     getIdentityByFirstPublicKey(b'4e2736d0eecca645821089eb4b2422544e045655')
+    getIdentityIdByFirstPublicKey(b'4e2736d0eecca645821089eb4b2422544e045655')
     send_transaction(b'03000000014f83880b387e1d4a639f8dd59083ab68f464516a060e4725cc1530a0ee2c3d41000000006b483045022100e7ea589971130f6221ec129b66696ecdd359576b7421e8ee5ab0c7e8c4dc3c460220075c25bd0384148de5636af8bc16f4cc271156d20a3eae26e6b590bfc84033d2012103a65caff6ca4c0415a3ac182dfc2a6d3a4dceb98e8b831e71501df38aa156f2c1ffffffff02204e0000000000001976a91409cf4b155dd5ca22979c1390df14aaaa1009bbee88ac44701a3d050000001976a91416b93a3b9168a20605cc3cda62f6135a3baa531a88ac00000000')
     applyStateTransition(b'pmR0eXBlAmdhY3Rpb25zgQFpZG9jdW1lbnRzgaZkJHJldgFlJHR5cGVocHJlb3JkZXJnJHVzZXJJZHgsR0pNVm51UzdYVFhkaWtnalFyRDR0TjVaSkNYem02eE12R0dyNVNkdGVjcDFoJGVudHJvcHl4InlVOXVta1Q0QnZjQWpQSmpGRVRGNW9CbUgzdEEyU3FKS2drJGNvbnRyYWN0SWR4LDJLZk1jTXhrdEtpbUp4QVpVZVp3WWtGVXNFY0FaaERLRXBRczhHTW5wVXNlcHNhbHRlZERvbWFpbkhhc2h4XjU2MmQ4Y2Q1YTQ1Nzg4ZWU0MWM3YzNiYWNhZGU5ODMwNGY0MTk0MzkyOTA4NDgxMzljOWZiZDU2MTI3NDY1NzM3NDJlNzQ2ODY1NzA2ODY1N2EzMzJlNjQ2MTczNjhpc2lnbmF0dXJleFhIMkxxMW5pM1cyR0Q0TXlqK3lzSHdOMExKRXdHSjExMTRaTHExL0dTalJxakliY2Z0VzcvUkpZVFozeFhnOW0wTTJ4SnVJSEwvMzVGUFVUdUkxUUFBSTg9b3Byb3RvY29sVmVyc2lvbgB0c2lnbmF0dXJlUHVibGljS2V5SWQB')
 

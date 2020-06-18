@@ -38,6 +38,9 @@ class GRpcClient:
         elif method == 'getIdentityByFirstPublicKey':
             return GRpcClient.getIdentityByFirstPublicKey(stub, params, options)
 
+        elif method == 'getIdentityIdByFirstPublicKey':
+            return GRpcClient.getIdentityIdByFirstPublicKey(stub, params, options)
+
         elif method == 'getBlock':
             return GRpcClient.getBlock(stubCore, params, options)
 
@@ -157,5 +160,13 @@ class GRpcClient:
         request.public_key_hash = params['public_key_hash']
 
         response = stub.getIdentityByFirstPublicKey(request, options['timeout'])
+
+        return response
+
+    def getIdentityIdByFirstPublicKey(stub, params, options):
+        request = platform_pb2.GetIdentityIdByFirstPublicKeyRequest()
+        request.public_key_hash = params['public_key_hash']
+
+        response = stub.getIdentityIdByFirstPublicKey(request, options['timeout'])
 
         return response
