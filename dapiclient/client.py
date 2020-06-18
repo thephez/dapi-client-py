@@ -164,7 +164,6 @@ class DAPIClient:
                 }
             )
 
-
     def getDataContract(self, id):
         return self.make_request_to_random_dapi_grpc_node(
                 'getDataContract',
@@ -192,6 +191,14 @@ class DAPIClient:
                 'applyStateTransition',
                 {
                     'state_transition': state_transition
+                }
+            )
+
+    def getIdentityByFirstPublicKey(self, public_key_hash):
+        return self.make_request_to_random_dapi_grpc_node(
+                'getIdentityByFirstPublicKey',
+                {
+                    'public_key_hash': public_key_hash
                 }
             )
 
