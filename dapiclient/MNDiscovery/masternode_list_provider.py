@@ -1,6 +1,6 @@
 import random
 import datetime
-from dapiclient.rpc.jsonrpc.jsonrpc_client import JsonRpcClient
+from rpc.jsonrpc.jsonrpc_client import JsonRpcClient
 
 # TODO: Stop using hard-coded seed in all requests
 SEED_IP = 'seed-1.testnet.networks.dash.org'
