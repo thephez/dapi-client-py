@@ -8,12 +8,12 @@ import rpc.grpc.transactions_filter_stream_pb2 as transactions_filter_stream_pb2
 import rpc.grpc.transactions_filter_stream_pb2_grpc as transactions_filter_stream_pb2_grpc
 
 import cbor2
-import base64
+import base58
 
 GRPC_REQUEST_TIMEOUT = 5
 
 # Set up connection
-channel = grpc.insecure_channel('seed-1.evonet.networks.dash.org:3010')
+channel = grpc.insecure_channel('seed-1.testnet.networks.dash.org:3010')
 stub = platform_pb2_grpc.PlatformStub(channel)
 stubCore = core_pb2_grpc.CoreStub(channel)
 stubTransactions = transactions_filter_stream_pb2_grpc.TransactionsFilterStreamStub(channel)
@@ -139,8 +139,8 @@ def applyStateTransition(state_transition):
 
 
 def main():
-    identity_id = 'C7id2mah2RkiroiTy6h134hLgS6A47jhh5x91tvw16bz'
-    dpns_contract_id = 'ARQGUnPH3YMK8FZuqwUjnTWEF6Zu4Cf3sT6e1Ruu1RXk'
+    identity_id =  base58.b58decode('HWnTMizyGZbbEFrMvPPEJa3JoGyb5TCMiGEEZaom9Dbq')
+    contract_id = base58.b58decode('BoPsUbRjBfUEEiLj4M7ZqD5dFVwhQgA53DtrxZ5D3TyP')
     transaction_id = '0f8409a5239150bc9a12c2d3b9a430dcc515ef562906a46e2bfb3ba418d8c9e3'
 
     bloom_filter = {
@@ -151,10 +151,9 @@ def main():
     }
 
     get_identity(identity_id)
-    get_data_contract(dpns_contract_id)
-    get_documents(dpns_contract_id, 'note', 'limit = 2')
+    get_data_contract(contract_id)
+    get_documents(contract_id, 'documents', 'limit = 2')
     get_block('000000079cac3c9e8f40d200589d3935df984fcb89bbbe46f24653b7ccfb5e9c', 1)
-    get_status()
     get_transaction(transaction_id)
     subscribeToTransactionsWithProofs(bloom_filter, from_block_height=1, count=1, send_transaction_hashes=0)
     getIdentityByFirstPublicKey(b'4e2736d0eecca645821089eb4b2422544e045655')
