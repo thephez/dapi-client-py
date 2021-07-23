@@ -1,4 +1,4 @@
-from client import DAPIClient
+from dapiclient.client import DAPIClient
 import cbor2
 
 client = DAPIClient()

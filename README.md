@@ -13,12 +13,12 @@ python3-venv
 
 
 ```
-git clone https://github.com/10xcryptodev/dapi-client-py.git
+git clone https://github.com/mayoreee/dapi-client-py.git
 cd dapi-client-py
 python3 -m venv dapiclient-venv
 source dapiclient-venv/bin/activate
 pip install -r requirements.txt
-python setup.py install
+python install .
 
 # Check masternode list
 python dapiclient/test-mndiscovery.py
@@ -33,7 +33,7 @@ python dapiclient/test-dapiclient.py
 ## Layer 1
 
 ```python
-from client import DAPIClient
+from dapiclient.client import DAPIClient
 
 client = DAPIClient()
 
@@ -49,7 +49,7 @@ print(genesis_block_hash)
 ## Layer 2
 
 ```python
-from client import DAPIClient
+from dapiclient.client import DAPIClient
 import cbor2
 
 client = DAPIClient()

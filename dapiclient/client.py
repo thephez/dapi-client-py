@@ -1,12 +1,14 @@
 import sys
-from MNDiscovery.masternode_discovery import MasternodeDiscovery
-from rpc.jsonrpc.jsonrpc_client import JsonRpcClient
-from rpc.grpc.grpc_client import GRpcClient
+from dapiclient.MNDiscovery.masternode_discovery import MasternodeDiscovery
+from dapiclient.rpc.jsonrpc.jsonrpc_client import JsonRpcClient
+from dapiclient.rpc.grpc.grpc_client import GRpcClient
+
 
 SEED_PORT = 3000
 SEED_PORT_GRPC = 3010
 GRPC_REQUEST_TIMEOUT = 5
 GRPC_MAX_RESULTS = 100
+
 
 class DAPIClient:
     """docstring for DAPIClient."""

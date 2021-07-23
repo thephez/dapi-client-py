@@ -1,11 +1,11 @@
 import grpc
 
-import rpc.grpc.core_pb2 as core_pb2
-import rpc.grpc.core_pb2_grpc as core_pb2_grpc
-import rpc.grpc.platform_pb2 as platform_pb2
-import rpc.grpc.platform_pb2_grpc as platform_pb2_grpc
-import rpc.grpc.transactions_filter_stream_pb2 as transactions_filter_stream_pb2
-import rpc.grpc.transactions_filter_stream_pb2_grpc as transactions_filter_stream_pb2_grpc
+import dapiclient.rpc.grpc.core_pb2 as core_pb2
+import dapiclient.rpc.grpc.core_pb2_grpc as core_pb2_grpc
+import dapiclient.rpc.grpc.platform_pb2 as platform_pb2
+import dapiclient.rpc.grpc.platform_pb2_grpc as platform_pb2_grpc
+import dapiclient.rpc.grpc.transactions_filter_stream_pb2 as transactions_filter_stream_pb2
+import dapiclient.rpc.grpc.transactions_filter_stream_pb2_grpc as transactions_filter_stream_pb2_grpc
 
 import cbor2
 import base58
