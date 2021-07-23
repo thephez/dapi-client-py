@@ -139,8 +139,8 @@ def applyStateTransition(state_transition):
 
 
 def main():
-    identity_id =  base58.b58decode('HWnTMizyGZbbEFrMvPPEJa3JoGyb5TCMiGEEZaom9Dbq')
-    contract_id = base58.b58decode('BoPsUbRjBfUEEiLj4M7ZqD5dFVwhQgA53DtrxZ5D3TyP')
+    identity_id =  base58.b58decode('GCAFKUdw7PtUcDEG8j3sicMJ4ngx1aTqCdb4HD5n5WZ7')
+    contract_id = base58.b58decode('En3GRoMNAnt69firp32h3NEBxyveLcHQMUbwhDW2UqoX')
     transaction_id = '0f8409a5239150bc9a12c2d3b9a430dcc515ef562906a46e2bfb3ba418d8c9e3'
 
     bloom_filter = {
@@ -152,7 +152,7 @@ def main():
 
     get_identity(identity_id)
     get_data_contract(contract_id)
-    get_documents(contract_id, 'documents', 'limit = 2')
+    get_documents(contract_id, 'thumbnailField', 'limit = 2')
     get_block('000000079cac3c9e8f40d200589d3935df984fcb89bbbe46f24653b7ccfb5e9c', 1)
     get_transaction(transaction_id)
     subscribeToTransactionsWithProofs(bloom_filter, from_block_height=1, count=1, send_transaction_hashes=0)
