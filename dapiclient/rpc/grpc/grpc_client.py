@@ -16,7 +16,7 @@ class GRpcClient:
         pass
 
     def request(socket, method, params = {}, options = {'timeout': 5}):
-        channel = grpc.insecure_channel(socket)
+        channel = grpc.insecure_channel(socket, options=(('grpc.enable_http_proxy', 0),))
         #print(socket)
 
         stub = platform_pb2_grpc.PlatformStub(channel)
