@@ -3,7 +3,7 @@ import datetime
 from dapiclient.rpc.jsonrpc.jsonrpc_client import JsonRpcClient
 
 # TODO: Stop using hard-coded seed in all requests
-SEED_IP = 'seed-1.testnet.networks.dash.org'
+SEED_IP = '34.219.81.129'
 SEED_PORT = 3000
 MN_LIST_UPDATE_INTERVAL = 60000 / 1000
 
