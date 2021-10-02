@@ -13,8 +13,10 @@ GRPC_MAX_RESULTS = 100
 class DAPIClient:
     """docstring for DAPIClient."""
 
-    def __init__(self, options = {}):
-        self.mn_discovery = MasternodeDiscovery() #options['seeds'], options['port'])
+    def __init__(self, seed_ip = None,mn_ip = None, options = {}):
+        # support user-defined seeds and ip
+        self.mn_ip = mn_ip
+        self.mn_discovery = MasternodeDiscovery(seeds=seed_ip) #options['seeds'], options['port'])
         self.dapi_port = SEED_PORT #if options.port not in options else options.port
         self.native_grpc_port = SEED_PORT_GRPC #options.nativeGrpcPort || config.grpc.nativePort;
         self.timeout = 2000 #options.timeout || 2000;
@@ -104,8 +106,11 @@ class DAPIClient:
 
     def make_request_to_random_dapi_grpc_node(self, method, params = {}, options = {}, excluded_ips = []):
         #self.make_request['call_count'] = 0;
-        random_masternode = self.mn_discovery.get_random_masternode()
-        ip = random_masternode.split(":")[0]
+        if (self.mn_ip is None):
+             random_masternode = self.mn_discovery.get_random_masternode()
+             ip = random_masternode.split(":")[0]
+        else:
+            ip = self.mn_ip
         socket = '{}:{}'.format(ip, self.native_grpc_port)
 
         options = {

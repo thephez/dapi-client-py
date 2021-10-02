@@ -8,64 +8,6 @@ SEED_PORT = 3000
 MN_LIST_UPDATE_INTERVAL = 60000 / 1000
 
 
-# TODO: Add list validation
-# /**
-#  * validates proof params of cbTxMerkleTree
-#  * @param {SimplifiedMNListDiff} diff - masternode list diff
-#  * @param {string} header - block hash of the ending block of the diff request
-#  * @returns {boolean}
-#  */
-# function isValidDiffListProof(diff, header) {
-#   const objDiff = SimplifiedMNListDiff.fromObject(diff);
-#   const merkleBlock = new MerkleBlock({
-#     header,
-#     numTransactions: objDiff.cbTxMerkleTree.totalTransactions,
-#     hashes: objDiff.cbTxMerkleTree.merkleHashes,
-#     flags: objDiff.cbTxMerkleTree.merkleFlags,
-#   });
-#
-#   return merkleBlock.validMerkleTree() && merkleBlock.hasTransaction(objDiff.cbTx);
-# }
-#
-# /**
-#  * verifies masternode list diff against local header chain
-#  * @param {string} blockHash
-#  * @returns {Promise<BlockHeader>}
-#  */
-# async function getHeaderFromLocalChain(blockHash) { // eslint-disable-line no-unused-vars
-# // TODO: implement local headerChain with lightning fast dspv sync
-# // the following commented lines just a dummy to simulate a header store
-# // const headerChain = new SpvChain('testnet');
-# // const header = BlockHeader.fromString(await headerChain.getHeader(blockHash));
-#   const header = BlockHeader.fromString(dummyHeader);
-#   if (!header) {
-#     throw new Error(`Failed to find cbTxHeader in local store for block hash ${blockHash}`);
-#   }
-#
-#   return header;
-# }
-#
-# /**
-#  * validates masternode list diff against local header chain and merkle proof
-#  * @param {SimplifiedMNListDiff} diff - masternode list diff
-#  * @returns {Promise<boolean>}
-#  */
-# async function validateDiff(diff) { // eslint-disable-line no-unused-vars
-#   // TODO: enable below once we have a local header chain
-#   const validHeader = await getHeaderFromLocalChain(diff.blockHash);
-#   if (!validHeader) {
-#     return false;
-#   }
-#
-#   // dummy header
-#   if (!isValidDiffListProof(diff, validHeader)) {
-#     throw new Error('Invalid masternode diff proofs');
-#   }
-#
-#   return true;
-# }
-
-
 
 '''
  * This class holds the valid deterministic masternode list
@@ -93,6 +35,7 @@ class SimplifiedMNListEntry:
 
 class MasternodeListProvider:
     def __init__(self, seeds, dapi_port = SEED_PORT):
+        self.SEED_IP = seeds
         if seeds is None:
             seeds = SEED_IP
         if dapi_port is None:
@@ -112,7 +55,7 @@ class MasternodeListProvider:
         genesis_height = 0
         #node = self.isEmptyMasternodeList() ? sample(self.seeds) : sample(self.masternodeList);
         #ip_address = node.service.split(':')[0];
-        ip_address = SEED_IP
+        ip_address = self.SEED_IP
 
         genesis_block_hash = JsonRpcClient.request({
             'host': ip_address,
@@ -135,7 +78,7 @@ class MasternodeListProvider:
     def get_simplified_mn_list_diff(self):
         #node = this.isEmptyMasternodeList() ? sample(this.seeds) : sample(this.masternodeList);
         base_block_hash = self.base_block_hash;
-        ip_address = SEED_IP #node.service.split(':')[0];
+        ip_address =  self.SEED_IP #node.service.split(':')[0];
 
         block_hash = JsonRpcClient.request({
             'host': ip_address,

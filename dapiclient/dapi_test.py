@@ -4,9 +4,10 @@ import cbor2
 import base58
 
 
-client = DAPIClient()
 
-def getDocuments(data):
+
+def getDocuments(data, seeds):
+    client = DAPIClient()
     docs = client.getDocuments(
         data['contract_id'],
         data['document_type'],
