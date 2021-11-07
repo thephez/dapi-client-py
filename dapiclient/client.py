@@ -110,9 +110,8 @@ class DAPIClient:
              random_masternode = self.mn_discovery.get_random_masternode()
              ip = random_masternode.split(":")[0]
         else:
-            ip = self.mn_ip
+             ip = self.mn_ip
         socket = '{}:{}'.format(ip, self.native_grpc_port)
-
         options = {
             'timeout': GRPC_REQUEST_TIMEOUT
         }

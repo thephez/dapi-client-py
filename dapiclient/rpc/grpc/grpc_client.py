@@ -65,9 +65,14 @@ class GRpcClient:
         identity_request = platform_pb2.GetIdentityRequest()
         # Set identity parameter of request
         identity_request.id = params['id']
-
+       
         response = stub.getIdentity(identity_request, options['timeout'])
-        return cbor2.loads(response.identity)
+
+        responseBytes = bytearray(response.identity)
+        identityBytes = responseBytes[4 : len(responseBytes)]
+
+
+        return cbor2.loads(identityBytes)
 
 
     def getDataContract(stub, params, options):
@@ -94,10 +99,12 @@ class GRpcClient:
 
         response = stub.getDocuments(document_request, options['timeout'])
 
-        #for d in response.documents:
-        #    print('Document cbor: {}\n'.format(cbor2.loads(d)))
-
-        return response.documents
+        documents = []
+        for doc in response.documents:
+             docBytes = doc[4 : len(doc)]
+             documents.append(cbor2.loads(docBytes))
+             
+        return documents
 
     def getBlock(stubCore, params, options):
         block_request = core_pb2.GetBlockRequest()
