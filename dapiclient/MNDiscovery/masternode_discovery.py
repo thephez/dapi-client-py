@@ -1,3 +1,4 @@
+from dapiclient.MNDiscovery import DAPI_ADDRESSES_WHITELEIST
 from .masternode_list_provider import MasternodeListProvider
 import random
 
@@ -9,7 +10,18 @@ class MasternodeDiscovery:
 
     def get_random_masternode(self, excluded_ips = None):
         mnlist = self.mnlist_provider.get_mn_list()
-        return random.sample(mnlist, 1)[0]['service']      
+        ip_list = []
+        for mn in mnlist:
+            current_mn_ip = mn['service'].split(":")[0]
+            ip_list.append(current_mn_ip)
+        
+        checked_ip_list = []
+
+        for ip in ip_list:
+            if ip in DAPI_ADDRESSES_WHITELEIST:
+                checked_ip_list.append(ip)
+    
+        return random.choice(checked_ip_list)
 
     def get_mnlist(self):
         return self.mnlist_provider.get_mn_list()

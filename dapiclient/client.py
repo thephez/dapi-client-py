@@ -23,7 +23,7 @@ class DAPIClient:
         #self.forceJsonRpc = options.forceJsonRpc;
         #preconditionsUtil.checkArgument(jsutil.isUnsignedInteger(self.timeout),
         #  'Expect timeout to be an unsigned integer');
-        self.retries = 1 #options.retries ? options.retries : 3;
+        self.retries = 3 #options.retries ? options.retries : 3;
         #preconditionsUtil.checkArgument(jsutil.isUnsignedInteger(self.retries),
         #  'Expect retries to be an unsigned integer');
         #self.dpp = new DPP();
@@ -33,7 +33,7 @@ class DAPIClient:
     def make_request_to_random_dapi_node(self, method, params = {}, excluded_ips = []):
         #self.make_request['call_count'] = 0;
 
-        return self.make_request_with_retries(method, params, self.retries, excluded_ips);
+        return self.make_request_with_retries(method, params, self.retries, excluded_ips)
 
 
     def make_request(self, method, params, excluded_ips = []):
@@ -104,23 +104,34 @@ class DAPIClient:
 
     # gRPC endpoints
 
-    def make_request_to_random_dapi_grpc_node(self, method, params = {}, options = {}, excluded_ips = []):
+    def make_request_to_random_dapi_grpc_node(self, method, retries_count, params = {}, options = {}, excluded_ips = []):
         #self.make_request['call_count'] = 0;
         if (self.mn_ip is None):
              random_masternode = self.mn_discovery.get_random_masternode()
-             ip = random_masternode.split(":")[0]
+             ip = random_masternode
         else:
              ip = self.mn_ip
+
         socket = '{}:{}'.format(ip, self.native_grpc_port)
         options = {
             'timeout': GRPC_REQUEST_TIMEOUT
         }
+        
+        try:
+            return GRpcClient.request(socket, method, params, options)
+        except Exception as ex:
+            print('Exception:\n{}'.format(ex))
+            if (retries_count > 0):
+                print('*** Retrying ***')
+                excluded_on_next_try = []
+                return self.make_request_to_random_dapi_grpc_node(method, retries_count - 1)
 
-        return GRpcClient.request(socket, method, params, options)
+            raise Exception('max retries to connect to DAPI grpc node reached')
 
     def subscribeToTransactionsWithProofs(self, bloom_filter, from_block_hash, from_block_height, count=0, send_transaction_hashes=0):
         return self.make_request_to_random_dapi_grpc_node(
                 'subscribeToTransactionsWithProofs',
+                self.retries,
                 {
                     'bloom_filter': bloom_filter,
                     'from_block_hash': from_block_hash,
@@ -133,6 +144,7 @@ class DAPIClient:
     def getBlock(self, hash=0, height=0):
         return self.make_request_to_random_dapi_grpc_node(
                 'getBlock',
+                self.retries,
                 {
                     'hash': hash,
                     'height': height
@@ -141,12 +153,14 @@ class DAPIClient:
 
     def getStatus(self):
         return self.make_request_to_random_dapi_grpc_node(
-                'getStatus'
+                'getStatus',
+                self.retries,
         )
 
     def getTransaction(self, id):
         return self.make_request_to_random_dapi_grpc_node(
                 'getTransaction',
+                self.retries,
                 {
                     'id': id
                 }
@@ -155,6 +169,7 @@ class DAPIClient:
     def sendTransaction(self, transaction, allow_high_fees=0, bypass_limits=0):
         return self.make_request_to_random_dapi_grpc_node(
                 'sendTransaction',
+                self.retries,
                 {
                     'transaction': transaction,
                     'allow_high_fees': allow_high_fees,
@@ -165,6 +180,7 @@ class DAPIClient:
     def getIdentity(self, id):
         return self.make_request_to_random_dapi_grpc_node(
                 'getIdentity',
+                self.retries,
                 {
                     'id': id
                 }
@@ -172,7 +188,8 @@ class DAPIClient:
 
     def getDataContract(self, id):
         return self.make_request_to_random_dapi_grpc_node(
-                'getDataContract',
+                'getDataContract', 
+                self.retries,
                 {
                     'id': id
                 }
@@ -180,7 +197,7 @@ class DAPIClient:
 
     def getDocuments(self, data_contract_id, document_type, where=b'', order_by=b'', limit=GRPC_MAX_RESULTS, start_at=0, start_after=0):
         return self.make_request_to_random_dapi_grpc_node(
-                'getDocuments',
+                'getDocuments', self.retries,
                 {
                     'data_contract_id': data_contract_id,
                     'document_type': document_type,
@@ -195,6 +212,7 @@ class DAPIClient:
     def applyStateTransition(self, state_transition):
         return self.make_request_to_random_dapi_grpc_node(
                 'applyStateTransition',
+                self.retries,
                 {
                     'state_transition': state_transition
                 }
@@ -203,6 +221,7 @@ class DAPIClient:
     def getIdentityByFirstPublicKey(self, public_key_hash):
         return self.make_request_to_random_dapi_grpc_node(
                 'getIdentityByFirstPublicKey',
+                self.retries,
                 {
                     'public_key_hash': public_key_hash
                 }
@@ -211,6 +230,7 @@ class DAPIClient:
     def getIdentityIdByFirstPublicKey(self, public_key_hash):
         return self.make_request_to_random_dapi_grpc_node(
                 'getIdentityIdByFirstPublicKey',
+                self.retries,
                 {
                     'public_key_hash': public_key_hash
                 }
