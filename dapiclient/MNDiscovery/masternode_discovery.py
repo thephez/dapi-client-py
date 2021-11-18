@@ -1,4 +1,4 @@
-from dapiclient.MNDiscovery import DAPI_ADDRESSES_WHITELEIST
+from dapiclient.MNDiscovery import DAPI_ADDRESSES_WHITELIST
 from .masternode_list_provider import MasternodeListProvider
 import random
 
@@ -18,7 +18,7 @@ class MasternodeDiscovery:
         checked_ip_list = []
 
         for ip in ip_list:
-            if ip in DAPI_ADDRESSES_WHITELEIST:
+            if ip in DAPI_ADDRESSES_WHITELIST:
                 checked_ip_list.append(ip) 
         return random.choice(checked_ip_list)
 
