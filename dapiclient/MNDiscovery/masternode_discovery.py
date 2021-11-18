@@ -19,8 +19,7 @@ class MasternodeDiscovery:
 
         for ip in ip_list:
             if ip in DAPI_ADDRESSES_WHITELEIST:
-                checked_ip_list.append(ip)
-    
+                checked_ip_list.append(ip) 
         return random.choice(checked_ip_list)
 
     def get_mnlist(self):

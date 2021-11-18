@@ -6,7 +6,7 @@ from dapiclient.rpc.grpc.grpc_client import GRpcClient
 
 SEED_PORT = 3000
 SEED_PORT_GRPC = 3010
-GRPC_REQUEST_TIMEOUT = 5
+GRPC_REQUEST_TIMEOUT = 50000
 GRPC_MAX_RESULTS = 100
 
 
