@@ -187,16 +187,17 @@ class DAPIClient:
                 }
             )
 
-    def getDataContract(self, id):
+    def getDataContract(self, id, prove):
         return self.make_request_to_random_dapi_grpc_node(
                 'getDataContract', 
                 self.retries,
                 {
-                    'id': id
+                    'id': id,
+                    'prove': prove
                 }
             )
 
-    def getDocuments(self, data_contract_id, document_type, where=b'', order_by=b'', limit=GRPC_MAX_RESULTS, start_at=0, start_after=0):
+    def getDocuments(self, data_contract_id, document_type, prove, start_at=b'', start_after=b'', where=b'', order_by=b'', limit=GRPC_MAX_RESULTS,):
         return self.make_request_to_random_dapi_grpc_node(
                 'getDocuments', self.retries,
                 {
@@ -206,7 +207,8 @@ class DAPIClient:
                     'order_by': order_by,
                     'limit': limit,
                     'start_at': start_at,
-                    'start_after': start_after
+                    'start_after': start_after,
+                    'prove': prove,
                 }
             )
 
