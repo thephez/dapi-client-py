@@ -177,12 +177,13 @@ class DAPIClient:
                 }
         )
 
-    def getIdentity(self, id):
+    def getIdentity(self, id, prove):
         return self.make_request_to_random_dapi_grpc_node(
                 'getIdentity',
                 self.retries,
                 {
-                    'id': id
+                    'id': id,
+                    'prove': prove,
                 }
             )
 

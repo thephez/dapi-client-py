@@ -6,8 +6,6 @@ import dapiclient.rpc.grpc.core_pb2 as core_pb2
 import dapiclient.rpc.grpc.core_pb2_grpc as core_pb2_grpc
 import dapiclient.rpc.grpc.platform_pb2 as platform_pb2
 import dapiclient.rpc.grpc.platform_pb2_grpc as platform_pb2_grpc
-import dapiclient.rpc.grpc.transactions_filter_stream_pb2 as transactions_filter_stream_pb2
-import dapiclient.rpc.grpc.transactions_filter_stream_pb2_grpc as transactions_filter_stream_pb2_grpc
 
 
 class GRpcClient:
@@ -21,7 +19,6 @@ class GRpcClient:
 
         stub = platform_pb2_grpc.PlatformStub(channel)
         stubCore = core_pb2_grpc.CoreStub(channel)
-        stubTransactions = transactions_filter_stream_pb2_grpc.TransactionsFilterStreamStub(channel)
 
         if method == 'getIdentity':
             return GRpcClient.getIdentity(stub, params, options)
@@ -54,7 +51,7 @@ class GRpcClient:
             return GRpcClient.sendTransaction(stubCore, params, options)
 
         elif method == 'subscribeToTransactionsWithProofs':
-            return GRpcClient.subscribeToTransactionsWithProofs(stubTransactions, params, options)
+            return GRpcClient.subscribeToTransactionsWithProofs(stubCore, params, options)
 
         else:
             raise ValueError('Unknown gRPC endpoint: {}'.format(method))
@@ -64,7 +61,9 @@ class GRpcClient:
         # Create Identity request
         identity_request = platform_pb2.GetIdentityRequest()
         # Set identity parameter of request
-        identity_request.id = params['id']
+        identity_request.id = params['id'] 
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # identity_request.prove = params['prove']
        
         response = stub.getIdentity(identity_request, options['timeout'])
 
@@ -140,7 +139,7 @@ class GRpcClient:
         return response
 
     def subscribeToTransactionsWithProofs(stubTransactions, params, options):
-        subscribe_request = transactions_filter_stream_pb2.TransactionsWithProofsRequest()
+        subscribe_request = core_pb2.TransactionsWithProofsRequest()
         subscribe_request.from_block_hash = params['from_block_hash']
         subscribe_request.from_block_height = params['from_block_height']
         subscribe_request.count = params['count']
