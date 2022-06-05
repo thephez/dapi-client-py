@@ -13,7 +13,7 @@ class GRpcClient:
     def __init__(self):
         pass
 
-    def request(socket, method, params = {}, options = {'timeout': 5}):
+    def request(socket, method, params = {}, options = {'timeout': 5000}):
         channel = grpc.insecure_channel(socket, options=(('grpc.enable_http_proxy', 0),))
         #print(socket)
 
@@ -28,9 +28,6 @@ class GRpcClient:
 
         elif method == 'getDocuments':
             return GRpcClient.getDocuments(stub, params, options)
-
-        elif method == 'applyStateTransition':
-            return GRpcClient.applyStateTransition(stub, params, options)
 
         elif method == 'getIdentityByFirstPublicKey':
             return GRpcClient.getIdentityByFirstPublicKey(stub, params, options)
@@ -76,7 +73,9 @@ class GRpcClient:
 
     def getDataContract(stub, params, options):
         contract_request = platform_pb2.GetDataContractRequest()
-        contract_request.id = params['id']
+        contract_request.id = params['id'],
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # contract_request.prove = params['prove']
 
         response = stub.getDataContract(contract_request, options['timeout'])
         #print('Data Contract: {}\n'.format(cbor2.loads(response.data_contract)))
@@ -95,6 +94,8 @@ class GRpcClient:
         document_request.limit =  params['limit']
         document_request.start_at =  params['start_at']
         document_request.start_after = params['start_after']
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # document_request.prove = params['prove']
 
         response = stub.getDocuments(document_request, options['timeout'])
 
@@ -150,14 +151,6 @@ class GRpcClient:
         setattr(subscribe_request.bloom_filter, 'n_flags', params['bloom_filter']['n_flags'])
 
         response = stubTransactions.transactionWithProof(subscribe_request, options['timeout'])
-
-        return response
-
-    def applyStateTransition(stub, params, options):
-        apply_request = platform_pb2.ApplyStateTransitionRequest()
-        apply_request.state_transition = params['state_transition']
-
-        response = stub.applyStateTransition(apply_request, options['timeout'])
 
         return response
 
