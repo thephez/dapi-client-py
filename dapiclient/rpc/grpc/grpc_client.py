@@ -29,11 +29,14 @@ class GRpcClient:
         elif method == 'getDocuments':
             return GRpcClient.getDocuments(stub, params, options)
 
-        elif method == 'getIdentityByFirstPublicKey':
-            return GRpcClient.getIdentityByFirstPublicKey(stub, params, options)
+        elif method == 'getIdentitiesByPublicKeyHashes':
+            return GRpcClient.getIdentitiesByPublicKeyHashes(stub, params, options)
 
-        elif method == 'getIdentityIdByFirstPublicKey':
-            return GRpcClient.getIdentityIdByFirstPublicKey(stub, params, options)
+        elif method == 'getIdentityIdsByPublicKeyHashes':
+            return GRpcClient.getIdentityIdsByPublicKeyHashes(stub, params, options)
+
+        elif method == 'waitForStateTransitionResult':
+            return GRpcClient.waitForStateTransitionResult(stub, params, options)
 
         elif method == 'getBlock':
             return GRpcClient.getBlock(stubCore, params, options)
@@ -154,18 +157,33 @@ class GRpcClient:
 
         return response
 
-    def getIdentityByFirstPublicKey(stub, params, options):
-        request = platform_pb2.GetIdentityByFirstPublicKeyRequest()
-        request.public_key_hash = params['public_key_hash']
+    def getIdentitiesByPublicKeyHashes(stub, params, options):
+        request = platform_pb2.GetIdentitiesByPublicKeyHashesRequest()
+        request.public_key_hashes.extend(params['public_key_hashes'])
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # document_request.prove = params['prove']
 
-        response = stub.getIdentityByFirstPublicKey(request, options['timeout'])
+        response = stub.getIdentitiesByPublicKeyHashes(request, options['timeout'])
 
         return response
 
-    def getIdentityIdByFirstPublicKey(stub, params, options):
-        request = platform_pb2.GetIdentityIdByFirstPublicKeyRequest()
-        request.public_key_hash = params['public_key_hash']
+    def getIdentityIdsByPublicKeyHashes(stub, params, options):
+        request = platform_pb2.GetIdentityIdsByPublicKeyHashesRequest()
+        request.public_key_hashes.extend(params['public_key_hashes'])
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # document_request.prove = params['prove']
 
-        response = stub.getIdentityIdByFirstPublicKey(request, options['timeout'])
+        response = stub.getIdentityIdsByPublicKeyHashes(request, options['timeout'])
+
+        return response
+
+    
+    def waitForStateTransitionResult(stub, params, options):
+        request = platform_pb2.GetIdentityIdsByPublicKeyHashesRequest()
+        request.state_transition_hash = params['state_transition_hash']
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # request.prove = params['prove']
+
+        response = stub.waitForStateTransitionResult(request, options['timeout'])
 
         return response

@@ -212,30 +212,33 @@ class DAPIClient:
                 }
             )
 
-    def applyStateTransition(self, state_transition):
+    def getIdentitiesByPublicKeyHashes(self, public_key_hashes, prove):
         return self.make_request_to_random_dapi_grpc_node(
-                'applyStateTransition',
+                'getIdentitiesByPublicKeyHashes',
                 self.retries,
                 {
-                    'state_transition': state_transition
+                    'public_key_hashes': public_key_hashes,
+                    'prove': prove
                 }
             )
 
-    def getIdentityByFirstPublicKey(self, public_key_hash):
+    def getIdentityIdsByPublicKeyHashes(self, public_key_hashes, prove):
         return self.make_request_to_random_dapi_grpc_node(
-                'getIdentityByFirstPublicKey',
+                'getIdentityIdsByPublicKeyHashes',
                 self.retries,
                 {
-                    'public_key_hash': public_key_hash
+                    'public_key_hashes': public_key_hashes,
+                    'prove': prove
                 }
             )
-
-    def getIdentityIdByFirstPublicKey(self, public_key_hash):
+            
+    def waitForStateTransitionResult(self, state_transition_hash, prove):
         return self.make_request_to_random_dapi_grpc_node(
-                'getIdentityIdByFirstPublicKey',
+                'waitForStateTransitionResult',
                 self.retries,
                 {
-                    'public_key_hash': public_key_hash
+                    'state_transition_hash': state_transition_hash,
+                    'prove': prove
                 }
             )
 
