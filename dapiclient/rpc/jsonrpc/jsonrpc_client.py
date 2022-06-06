@@ -23,7 +23,7 @@ class JsonRpcClient:
         headers = {'content-type': 'application/json'}
 
         try:
-            response = requests.post(destination, data=json.dumps(payload), headers=headers, timeout=1)
+            response = requests.post(destination, data=json.dumps(payload), headers=headers, timeout=5000)
             response.raise_for_status()
 
             parsed = json.loads(response.text)
