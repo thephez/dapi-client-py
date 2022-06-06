@@ -6,8 +6,6 @@ import dapiclient.rpc.grpc.core_pb2 as core_pb2
 import dapiclient.rpc.grpc.core_pb2_grpc as core_pb2_grpc
 import dapiclient.rpc.grpc.platform_pb2 as platform_pb2
 import dapiclient.rpc.grpc.platform_pb2_grpc as platform_pb2_grpc
-import dapiclient.rpc.grpc.transactions_filter_stream_pb2 as transactions_filter_stream_pb2
-import dapiclient.rpc.grpc.transactions_filter_stream_pb2_grpc as transactions_filter_stream_pb2_grpc
 
 
 class GRpcClient:
@@ -15,13 +13,12 @@ class GRpcClient:
     def __init__(self):
         pass
 
-    def request(socket, method, params = {}, options = {'timeout': 5}):
+    def request(socket, method, params = {}, options = {'timeout': 5000}):
         channel = grpc.insecure_channel(socket, options=(('grpc.enable_http_proxy', 0),))
         #print(socket)
 
         stub = platform_pb2_grpc.PlatformStub(channel)
         stubCore = core_pb2_grpc.CoreStub(channel)
-        stubTransactions = transactions_filter_stream_pb2_grpc.TransactionsFilterStreamStub(channel)
 
         if method == 'getIdentity':
             return GRpcClient.getIdentity(stub, params, options)
@@ -32,14 +29,14 @@ class GRpcClient:
         elif method == 'getDocuments':
             return GRpcClient.getDocuments(stub, params, options)
 
-        elif method == 'applyStateTransition':
-            return GRpcClient.applyStateTransition(stub, params, options)
+        elif method == 'getIdentitiesByPublicKeyHashes':
+            return GRpcClient.getIdentitiesByPublicKeyHashes(stub, params, options)
 
-        elif method == 'getIdentityByFirstPublicKey':
-            return GRpcClient.getIdentityByFirstPublicKey(stub, params, options)
+        elif method == 'getIdentityIdsByPublicKeyHashes':
+            return GRpcClient.getIdentityIdsByPublicKeyHashes(stub, params, options)
 
-        elif method == 'getIdentityIdByFirstPublicKey':
-            return GRpcClient.getIdentityIdByFirstPublicKey(stub, params, options)
+        elif method == 'waitForStateTransitionResult':
+            return GRpcClient.waitForStateTransitionResult(stub, params, options)
 
         elif method == 'getBlock':
             return GRpcClient.getBlock(stubCore, params, options)
@@ -54,7 +51,7 @@ class GRpcClient:
             return GRpcClient.sendTransaction(stubCore, params, options)
 
         elif method == 'subscribeToTransactionsWithProofs':
-            return GRpcClient.subscribeToTransactionsWithProofs(stubTransactions, params, options)
+            return GRpcClient.subscribeToTransactionsWithProofs(stubCore, params, options)
 
         else:
             raise ValueError('Unknown gRPC endpoint: {}'.format(method))
@@ -64,7 +61,9 @@ class GRpcClient:
         # Create Identity request
         identity_request = platform_pb2.GetIdentityRequest()
         # Set identity parameter of request
-        identity_request.id = params['id']
+        identity_request.id = params['id'] 
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # identity_request.prove = params['prove']
        
         response = stub.getIdentity(identity_request, options['timeout'])
 
@@ -77,7 +76,9 @@ class GRpcClient:
 
     def getDataContract(stub, params, options):
         contract_request = platform_pb2.GetDataContractRequest()
-        contract_request.id = params['id']
+        contract_request.id = params['id'],
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # contract_request.prove = params['prove']
 
         response = stub.getDataContract(contract_request, options['timeout'])
         #print('Data Contract: {}\n'.format(cbor2.loads(response.data_contract)))
@@ -96,6 +97,8 @@ class GRpcClient:
         document_request.limit =  params['limit']
         document_request.start_at =  params['start_at']
         document_request.start_after = params['start_after']
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # document_request.prove = params['prove']
 
         response = stub.getDocuments(document_request, options['timeout'])
 
@@ -140,7 +143,7 @@ class GRpcClient:
         return response
 
     def subscribeToTransactionsWithProofs(stubTransactions, params, options):
-        subscribe_request = transactions_filter_stream_pb2.TransactionsWithProofsRequest()
+        subscribe_request = core_pb2.TransactionsWithProofsRequest()
         subscribe_request.from_block_hash = params['from_block_hash']
         subscribe_request.from_block_height = params['from_block_height']
         subscribe_request.count = params['count']
@@ -154,26 +157,33 @@ class GRpcClient:
 
         return response
 
-    def applyStateTransition(stub, params, options):
-        apply_request = platform_pb2.ApplyStateTransitionRequest()
-        apply_request.state_transition = params['state_transition']
+    def getIdentitiesByPublicKeyHashes(stub, params, options):
+        request = platform_pb2.GetIdentitiesByPublicKeyHashesRequest()
+        request.public_key_hashes.extend(params['public_key_hashes'])
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # document_request.prove = params['prove']
 
-        response = stub.applyStateTransition(apply_request, options['timeout'])
-
-        return response
-
-    def getIdentityByFirstPublicKey(stub, params, options):
-        request = platform_pb2.GetIdentityByFirstPublicKeyRequest()
-        request.public_key_hash = params['public_key_hash']
-
-        response = stub.getIdentityByFirstPublicKey(request, options['timeout'])
+        response = stub.getIdentitiesByPublicKeyHashes(request, options['timeout'])
 
         return response
 
-    def getIdentityIdByFirstPublicKey(stub, params, options):
-        request = platform_pb2.GetIdentityIdByFirstPublicKeyRequest()
-        request.public_key_hash = params['public_key_hash']
+    def getIdentityIdsByPublicKeyHashes(stub, params, options):
+        request = platform_pb2.GetIdentityIdsByPublicKeyHashesRequest()
+        request.public_key_hashes.extend(params['public_key_hashes'])
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # document_request.prove = params['prove']
 
-        response = stub.getIdentityIdByFirstPublicKey(request, options['timeout'])
+        response = stub.getIdentityIdsByPublicKeyHashes(request, options['timeout'])
+
+        return response
+
+    
+    def waitForStateTransitionResult(stub, params, options):
+        request = platform_pb2.GetIdentityIdsByPublicKeyHashesRequest()
+        request.state_transition_hash = params['state_transition_hash']
+        # TODO: Enable prove once its availabe in Platform v0.23
+        # request.prove = params['prove']
+
+        response = stub.waitForStateTransitionResult(request, options['timeout'])
 
         return response

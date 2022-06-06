@@ -2,8 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import platform_pb2 as platform__pb2
-
+from . import platform_pb2 as platform__pb2
 
 class PlatformStub(object):
     """Missing associated documentation comment in .proto file."""
