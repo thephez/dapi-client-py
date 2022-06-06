@@ -4,7 +4,6 @@ import grpc
 
 from . import platform_pb2 as platform__pb2
 
-
 class PlatformStub(object):
     """Missing associated documentation comment in .proto file."""
 
