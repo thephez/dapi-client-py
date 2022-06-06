@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import core_pb2 as core__pb2
+from . import core_pb2 as core__pb2
 
 
 class CoreStub(object):
