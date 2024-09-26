@@ -3,11 +3,10 @@ import importlib
 import random
 from logging import Handler
 from dapiclient.client import DAPIClient
-from thumbor.handlers.imaging import ImagingHandler
-from thumbor_dash.error_handlers.sentry import ErrorHandler
-from thumbor_dash.error_handlers import *
+# from thumbor.handlers.imaging import ImagingHandler
+# from thumbor_dash.error_handlers.sentry import ErrorHandler
+# from thumbor_dash.error_handlers import *
 
-import cbor2
 import base58
 from hashlib import sha256
 from binascii import hexlify, unhexlify
@@ -80,13 +79,13 @@ def getIdentityIdsByPublicKeyHashes(public_key_hashes, prove, seed_ip = None, mn
 def main():
     CONTRACT_ID = "GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec"
 
-# Test getIdentity
+    # Test getIdentity
     id = base58.b58decode("GgZekwh38XcWQTyWWWvmw6CEYFnLU7yiZFPWZEjqKHit")
     identity = getIdentity(id=id, prove=False)
     print("Test getIdentity", str(identity))
 
-# Tet getDataContract
-    contract_id = base58.b58decode("GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec")
+    # Test getDataContract
+    contract_id = base58.b58decode(CONTRACT_ID)
     data_contract = getDataContract(contract_id=contract_id, prove=False, seed_ip=None, mn_ip=None)
     print ("Test getDataContract", str(data_contract))
 
