@@ -82,14 +82,18 @@ class GRpcClient:
         return responseBytes
 
     def getDataContract(stub, params, options):
+        # Create a version-specific GetDataContractRequestV0 message
+        contract_request_v0 = platform_pb2.GetDataContractRequest.GetDataContractRequestV0()
+        contract_request_v0.id = params['id']
+        contract_request_v0.prove = params['prove']
+
+        # Create the GetDataContractRequest message and set the v0 field
         contract_request = platform_pb2.GetDataContractRequest()
-        contract_request.id = params['id'],
-        contract_request.prove = params['prove']
+        contract_request.v0.CopyFrom(contract_request_v0)
 
+        # Send the request and receive the response
         response = stub.getDataContract(contract_request, options['timeout'])
-        #print('Data Contract: {}\n'.format(cbor2.loads(response.data_contract)))
-
-        return cbor2.loads(response.data_contract)
+        return response
 
 
     def getDocuments(stub, params, options):

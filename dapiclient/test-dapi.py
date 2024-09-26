@@ -85,8 +85,8 @@ def main():
     print("Test getIdentity", str(identity))
 
 # Tet getDataContract
-    contract_id = base58.b58decode("EC7HZ6itSLiCmYsdR1gnqkxP1UWEaruQR2zdERHhgNfW")
-    data_contract = getDataContract(contract_id=contract_id, prove=False, seed_ip='seed-1.testnet.networks.dash.org', mn_ip=None)
+    contract_id = base58.b58decode("GWRSAVFMjXx8HpQFaNJMqBV7MBgMK4br5UESsB4S31Ec")
+    data_contract = getDataContract(contract_id=contract_id, prove=False, seed_ip=None, mn_ip=None)
     print ("Test getDataContract", str(data_contract))
 
 # Test getDocuments
