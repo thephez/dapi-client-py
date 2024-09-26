@@ -1,5 +1,6 @@
 import hashlib
 import importlib
+import random
 from logging import Handler
 from dapiclient.client import DAPIClient
 from thumbor.handlers.imaging import ImagingHandler
@@ -10,6 +11,7 @@ import cbor2
 import base58
 from hashlib import sha256
 from binascii import hexlify, unhexlify
+from dapiclient.MNDiscovery import DAPI_ADDRESSES_WHITELIST
 
 
 def getIdentity(id, prove, seed_ip = None, mn_ip = None):
@@ -78,8 +80,8 @@ def getIdentityIdsByPublicKeyHashes(public_key_hashes, prove, seed_ip = None, mn
 def main():
 
 # Test getIdentity
-    id = base58.b58decode("Bnj59EAZAfTjeoCGWYBhp3YhLb98oQXTeMXVBcx6qNt6")
-    identity = getIdentity(id=id, prove=False, seed_ip='seed-1.testnet.networks.dash.org', mn_ip=None)
+    id = base58.b58decode("GgZekwh38XcWQTyWWWvmw6CEYFnLU7yiZFPWZEjqKHit")
+    identity = getIdentity(id=id, prove=False)
     print("Test getIdentity", str(identity))
 
 # Tet getDataContract

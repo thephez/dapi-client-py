@@ -65,19 +65,21 @@ class GRpcClient:
 
     def getIdentity(stub, params, options):
         # Create Identity request
-        identity_request = platform_pb2.GetIdentityRequest()
+        identity_request_v0 = platform_pb2.GetIdentityRequest.GetIdentityRequestV0()
+
         # Set identity parameter of request
-        identity_request.id = params['id'] 
-        identity_request.prove = params['prove']
-       
+        identity_request_v0.id = params['id'] 
+        identity_request_v0.prove = params['prove']
+
+        # Create GetIdentityRequest instance and set version v0 to identity_request_v0
+        identity_request = platform_pb2.GetIdentityRequest()
+        identity_request.v0.CopyFrom(identity_request_v0)
+
         response = stub.getIdentity(identity_request, options['timeout'])
-
-        responseBytes = bytearray(response.identity)
-        identityBytes = responseBytes[4 : len(responseBytes)]
-
-
-        return cbor2.loads(identityBytes)
-
+        responseBytes = bytearray(response.v0.identity)
+        # identityBytes = responseBytes[4 : len(responseBytes)]
+        # return cbor2.loads(identityBytes)
+        return responseBytes
 
     def getDataContract(stub, params, options):
         contract_request = platform_pb2.GetDataContractRequest()
