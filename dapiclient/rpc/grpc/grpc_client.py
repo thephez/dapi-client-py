@@ -93,30 +93,43 @@ class GRpcClient:
 
         # Send the request and receive the response
         response = stub.getDataContract(contract_request, options['timeout'])
-        return response
+        return response.v0.data_contract
 
 
     def getDocuments(stub, params, options):
-        #print(params)
+        # Create the version-specific GetDocumentsRequestV0 message
+        document_request_v0 = platform_pb2.GetDocumentsRequest.GetDocumentsRequestV0()
 
+        # Set required fields
+        document_request_v0.data_contract_id = params['data_contract_id']
+        document_request_v0.document_type = params['document_type']
+        
+        # Check and set optional fields if present in params
+        if params.get('where'):
+            document_request_v0.where = params['where']
+            
+        if params.get('order_by'):
+            document_request_v0.order_by = params['order_by']
+            
+        if params.get('limit') is not None:
+            document_request_v0.limit = params['limit']
+        
+        # Handle oneof start (either start_at or start_after)
+        if params.get('start_after'):
+            document_request_v0.start_after = params['start_after']
+        elif params.get('start_at'):
+            document_request_v0.start_at = params['start_at']
+
+        document_request_v0.prove = params['prove']
+
+        # Create the GetDocumentsRequest message and set the v0 field
         document_request = platform_pb2.GetDocumentsRequest()
-        document_request.data_contract_id = params['data_contract_id']
-        document_request.document_type =  params['document_type']
-        document_request.where = params['where']
-        document_request.order_by = params['order_by']
-        document_request.limit =  params['limit']
-        document_request.start_at =  params['start_at']
-        document_request.start_after = params['start_after']
-        document_request.prove = params['prove']
+        document_request.v0.CopyFrom(document_request_v0)
 
+        # Send the request and receive the response
         response = stub.getDocuments(document_request, options['timeout'])
-
-        documents = []
-        for doc in response.documents:
-             docBytes = doc[4 : len(doc)]
-             documents.append(cbor2.loads(docBytes))
-             
-        return documents
+        # print(response)
+        return response.v0.documents
 
     def getBlock(stubCore, params, options):
         block_request = core_pb2.GetBlockRequest()
