@@ -41,12 +41,13 @@ class DAPIClient:
     def make_request(self, method, params, excluded_ips = []):
         #print(method)
         #self.make_request['call_count'] += 1
-        random_masternode = self.mn_discovery.get_random_masternode(excluded_ips)
+        # random_masternode = self.mn_discovery.get_random_masternode(excluded_ips)
+        random_masternode = random.choice(DAPI_ADDRESSES_WHITELIST)
         #print(random_masternode)
         return JsonRpcClient.request({
           'host': random_masternode.split(':')[0],
-          'port': self.dapi_port,
-        }, method, params, { 'timeout': self.timeout })
+          'port': random_masternode.split(':')[1],
+        }, method, params, { 'timeout': self.timeout }, False)
 
 
     def make_request_to_node(self, method, params, ip):
